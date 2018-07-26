@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d2635538e7077c479c73dbc4ed47206f",
-    "content-hash": "9a08de97a20bbc1b21b56eece7d0fb62",
+    "hash": "1421d76d677e750caf5e2d7695a0d2aa",
+    "content-hash": "037be77a553d33960e9e39a04c1d042c",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2576,36 +2576,6 @@
             "description": "Symfony DebugBundle",
             "homepage": "https://symfony.com",
             "time": "2018-06-23 12:23:56"
-        },
-        {
-            "name": "symfony/debug-pack",
-            "version": "v1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/debug-pack.git",
-                "reference": "ae4b15596788f9592f67f8615398671bf3f796e4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug-pack/zipball/ae4b15596788f9592f67f8615398671bf3f796e4",
-                "reference": "ae4b15596788f9592f67f8615398671bf3f796e4",
-                "shasum": ""
-            },
-            "require": {
-                "easycorp/easy-log-handler": "^1.0.2",
-                "php": "^7.0",
-                "symfony/debug-bundle": "^3.3|^4.0",
-                "symfony/monolog-bundle": "^3.0",
-                "symfony/profiler-pack": "^1.0",
-                "symfony/var-dumper": "^3.3|^4.0"
-            },
-            "type": "symfony-pack",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A debug pack for Symfony projects",
-            "time": "2018-03-29 13:53:44"
         },
         {
             "name": "symfony/dependency-injection",
