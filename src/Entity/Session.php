@@ -46,6 +46,11 @@ class Session
     {
         $this->photographs = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    
+    public function __toString() 
+    {
+        return $this->getName();
+    }
 
     public function getId()
     {

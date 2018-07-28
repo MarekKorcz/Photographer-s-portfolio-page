@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Photograph
  *
  * @ORM\Table(name="photograph")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PhotographRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PhotographRepository")
+ * @Vich\Uploadable
  */
 class Photograph
 {
@@ -27,6 +30,24 @@ class Photograph
      * @ORM\Column(name="name", type="string", length=50)
      */
     private $name;
+    
+    /**
+     * @ORM\Column(type="string", length=200)
+     * @var string
+     */
+    private $photo;
+
+    /**
+     * @Vich\UploadableField(mapping="photographs", fileNameProperty="photo")
+     * @var File
+     */
+    private $photoFile;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
     
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="photographs")
@@ -50,6 +71,34 @@ class Photograph
     public function getName()
     {
         return $this->name;
+    }
+    
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+    }
+
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function setPhotoFile(File $photo = null)
+    {
+        $this->photoFile = $photo;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($photo) {
+            
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getPhotoFile()
+    {
+        return $this->photoFile;
     }
      
     /**
