@@ -1,14 +1,10 @@
-parameters:
-    app.path.photographs: /uploads/images/photographs
-    
-vich_uploader:
-    mappings:
-        photographs:
-            uri_prefix:         '%app.path.photographs%'
-            upload_destination: '%kernel.root_dir%/../web%app.path.photographs%'
-
 easy_admin:
     site_name: 'Portfolio'
+    list:
+        actions:
+            - { name: 'show', icon: 'search' }
+            - { name: 'edit', icon: 'pencil' }
+            - { name: 'delete', icon: 'times-circle' }
     entities:
         Session:
             class: App\Entity\Session
@@ -16,16 +12,22 @@ easy_admin:
                 fields:
                     - 'name'
                     - 'description'
+            show:
+                fields:
+                    - 'name'
+                    - 'description'
+#                    - { property: 'photo', type: 'image', base_path: '%app.path.photographs%' }
         Photograph:
             class: App\Entity\Photograph
             form:
                 fields:
                     - 'name'
-                    - { property: 'photoFile', type: 'vich_image' }
+#                    - { property: 'photoFile', type: 'vich_image' }
                     - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false } }
+#                    - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false, enctype: multipart/form-data } }
             list:
                 fields:
-                    - { property: 'photo', type: 'image', base_path: '%app.path.photographs%' }
+#                    - { property: 'photo', type: 'image', base_path: '%app.path.photographs%' }
             show:
                 fields:
-                    - { property: 'photo', type: 'image', base_path: '%app.path.photographs%' }
+#                    - { property: 'photo', type: 'image', base_path: 'web%app.path.photographs%' }

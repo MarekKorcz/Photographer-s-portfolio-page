@@ -4,6 +4,7 @@
 /var/
 /vendor/
 /nbproject/
+/web/
 ###< symfony/framework-bundle ###
 
 /nbproject/private/
