@@ -16,18 +16,29 @@ easy_admin:
                 fields:
                     - 'name'
                     - 'description'
-#                    - { property: 'photo', type: 'image', base_path: '%app.path.photographs%' }
+            list:
+                fields:
+                    - 'name'
+                    - 'description'
+#                    display photos count
         Photograph:
             class: App\Entity\Photograph
             form:
                 fields:
                     - 'name'
-#                    - { property: 'photoFile', type: 'vich_image' }
-                    - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false } }
-#                    - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false, enctype: multipart/form-data } }
-            list:
-                fields:
-#                    - { property: 'photo', type: 'image', base_path: '%app.path.photographs%' }
+#                    it can not be nullable!
+                    - { property: 'photoFile', type: 'file', base_path: '%photographs_directory%' }
+                    - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false } }   
             show:
                 fields:
-#                    - { property: 'photo', type: 'image', base_path: 'web%app.path.photographs%' }
+                    - 'name'
+                    - 'updatedAt'
+                    - { property: 'photoName', type: 'image', base_path: '%photographs_directory%' }
+#                    - { property: 'photoPath', type: 'image' }   or this way ?
+                    - { property: 'session', type: 'text' }
+            list:
+                fields:
+                    - 'name'
+                    - 'photoPath'
+#                    - { property: 'photoPath', type: 'image' }
+                    - { property: 'session', type: 'text' }

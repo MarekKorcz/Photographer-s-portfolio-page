@@ -36,7 +36,7 @@ class Session
     private $description;
     
     /**
-     * @ORM\OneToMany(targetEntity="Photograph", mappedBy="session", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Photograph", mappedBy="session", cascade={"remove"})
      */
     private $photographs;
     

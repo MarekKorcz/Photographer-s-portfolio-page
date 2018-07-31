@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Photograph
@@ -32,15 +33,27 @@ class Photograph
      * @ORM\Column(type="string", length=200)
      * @var string
      */
-    private $photo;
+    private $photoName;
+    
+    /**
+     * @var File
+     */
+    private $photoFile;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     */
+    private $updatedAt;
     
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="photographs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     private $session;
-    
 
+
+    
     public function getId()
     {
         return $this->id;
@@ -58,17 +71,47 @@ class Photograph
         return $this->name;
     }
     
-    public function setPhoto($photo)
+    public function setPhotoName($photoName)
     {
-        $this->photo = $photo;
+        $this->photoName = $photoName;
     }
 
-    public function getPhoto()
+    public function getPhotoName()
     {
-        return $this->photo;
+        return $this->photoName;
     }
-     
-    /**
+    
+    // virtual method for displaying photos in easy admin's show and edit actions
+    public function getPhotoPath() {
+        
+        // this path still not working (TO FIX)
+        return './../public/uploads/photographs/' . $this->getPhotoName();
+    }
+
+        public function setPhotoFile(File $photo = null)
+    {
+        $this->photoFile = $photo;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($photo) {
+            
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getPhotoFile()
+    {
+        return $this->photoFile;
+    }
+    
+    public function getUpdatedAt() {
+        
+        return $this->updatedAt;
+    }
+
+        /**
      * Set session to photograph
      * 
      * @param \App\Entity\Session $session
