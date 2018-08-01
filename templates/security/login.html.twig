@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Secret Login Page</h1>
+
+    <form action="{{ path('login') }}" method="post">
+        <label for="username">Email:</label>
+        <input type="text" id="username" name="_username" />
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="_password" />
+
+    {#    Implement CSRF #}
+
+        <button type="submit">login</button>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('build/manifest.js') }}"></script>
+    <script src="{{ asset('build/vendor.js') }}"></script>
+    
+    {# common scripts and css #}
+    <script src="{{ asset('build/app.js') }}"></script>
+    
+    {# page specific scripts #}
+    <script src="{{ asset('build/login.js') }}"></script>
+{% endblock %}
