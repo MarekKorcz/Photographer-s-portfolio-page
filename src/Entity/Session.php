@@ -36,6 +36,11 @@ class Session
     private $description;
     
     /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Photograph", mappedBy="session", cascade={"remove"})
      */
     private $photographs;
@@ -44,6 +49,7 @@ class Session
     
     public function __construct() 
     {
+        $this->isActive = true;
         $this->photographs = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
@@ -79,6 +85,18 @@ class Session
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    public function setActive(bool $bool) 
+    {        
+        $this->isActive = $bool;
+
+        return $this;
+    }
+    
+    public function isActive() 
+    {        
+        return $this->isActive;
     }
     
     /**

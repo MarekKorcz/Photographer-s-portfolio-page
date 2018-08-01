@@ -59,8 +59,8 @@ class Photograph
 
 
     
-    public function __construct() {
-        
+    public function __construct() 
+    {        
         $this->isActive = true;
     }
 
@@ -92,8 +92,8 @@ class Photograph
     }
     
     // virtual method for displaying photos in easy admin's show and edit actions
-    public function getPhotoPath() {
-        
+    public function getPhotoPath() 
+    {        
         // this path still not working (TO FIX)
         return './../public/uploads/photographs/' . $this->getPhotoName();
     }
@@ -107,7 +107,7 @@ class Photograph
         // otherwise the event listeners won't be called and the file is lost
         if ($photo) {
             
-            $this->updatedAt = new \DateTime('now');
+            $this->setUpdatedAt();
         }
     }
 
@@ -116,20 +116,27 @@ class Photograph
         return $this->photoFile;
     }
     
-    public function getUpdatedAt() {
+    public function setUpdatedAt() 
+    {        
+        $this->updatedAt = new \DateTime('now');
         
+        return $this;
+    }
+
+    public function getUpdatedAt() 
+    {        
         return $this->updatedAt;
     }
     
-    public function setActive(bool $bool) {
-        
+    public function setActive(bool $bool) 
+    {        
         $this->isActive = $bool;
 
         return $this;
     }
     
-    public function isActive() {
-        
+    public function isActive() 
+    {        
         return $this->isActive;
     }
 

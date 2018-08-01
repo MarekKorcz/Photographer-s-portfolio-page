@@ -12,15 +12,18 @@ easy_admin:
                 fields:
                     - 'name'
                     - 'description'
+                    - { property: 'active', type: 'checkbox' }
             list:
                 fields:
                     - 'name'
                     - 'description'
+                    - { property: 'active', type: 'boolean' }
 #                    display photos count
             show:
                 fields:
                     - 'name'
                     - 'description'
+                    - { property: 'active', type: 'boolean' }
         Photograph:
             class: App\Entity\Photograph
             form:

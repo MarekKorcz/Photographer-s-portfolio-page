@@ -13,7 +13,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     private $fileUploader;
     
     // TODO: change it to global paramter value
-    private $targetDirectory = './../public/uploads/photographs/';
+    private $targetDirectory = '/uploads/photographs/';
 
     public function __construct(FileUploader $fileUploader)
     {
@@ -41,12 +41,27 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         // download Photograph's entity file from event
         $photoFile = $entity->getPhotoFile();
         
-        // move file to target directory and return its name
-        $photoName = $this->fileUploader->upload($photoFile);
+        // if photo haven't been chosen, skip the process of adding it
+        if ($photoFile) {
         
-        // asign name to Photograph's entity
-        $entity->setPhotoName($photoName);
+            // move file to target directory and return its name
+            $photoName = $this->fileUploader->upload($photoFile);
 
+            // asign name to Photograph's entity
+            $entity->setPhotoName($photoName);
+            
+        } else {
+            
+            // asign _blank to Photograph's entity name
+            $entity->setPhotoName('_blank');
+            
+            // disable default active state
+            $entity->setActive(false);
+            
+            // set date manually
+            $entity->setUpdatedAt();
+        }
+        
         // return Photograph's entity to event
         $event['entity'] = $entity;
     }
