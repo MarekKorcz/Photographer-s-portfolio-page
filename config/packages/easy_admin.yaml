@@ -12,33 +12,35 @@ easy_admin:
                 fields:
                     - 'name'
                     - 'description'
-            show:
-                fields:
-                    - 'name'
-                    - 'description'
             list:
                 fields:
                     - 'name'
                     - 'description'
 #                    display photos count
+            show:
+                fields:
+                    - 'name'
+                    - 'description'
         Photograph:
             class: App\Entity\Photograph
             form:
                 fields:
                     - 'name'
-#                    it can not be nullable!
                     - { property: 'photoFile', type: 'file', base_path: '%photographs_directory%' }
+                    - { property: 'active', type: 'checkbox' }
                     - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false } }   
+            list:
+                fields:
+                    - 'name'
+                    - 'photoPath'
+#                    - { property: 'photoPath', type: 'image' }
+                    - { property: 'active', type: 'boolean' }
+                    - { property: 'session', type: 'text' }
             show:
                 fields:
                     - 'name'
                     - 'updatedAt'
                     - { property: 'photoName', type: 'image', base_path: '%photographs_directory%' }
 #                    - { property: 'photoPath', type: 'image' }   or this way ?
-                    - { property: 'session', type: 'text' }
-            list:
-                fields:
-                    - 'name'
-                    - 'photoPath'
-#                    - { property: 'photoPath', type: 'image' }
-                    - { property: 'session', type: 'text' }
+                    - { property: 'active', type: 'boolean' }
+                    - { property: 'session', type: 'text' }                   

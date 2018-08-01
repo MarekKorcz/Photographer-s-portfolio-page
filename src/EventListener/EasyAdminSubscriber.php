@@ -59,21 +59,25 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
         
-        // download Photograph's name and remove the coresponding photo from directory
-        $photoName = $entity->getPhotoName();
-        unlink($this->targetDirectory . $photoName);
-        
         // download Photograph's entity file from event
         $photoFile = $entity->getPhotoFile();
         
-        // move file to target directory and return its name
-        $newPhotoName = $this->fileUploader->upload($photoFile);
+        // check if new photo is passed to edit
+        if ($photoFile) {
         
-        // asign name to Photograph's entity
-        $entity->setPhotoName($newPhotoName);
+            // download Photograph's name and remove previous photo from directory
+            $photoName = $entity->getPhotoName();
+            unlink($this->targetDirectory . $photoName);
 
-        // return Photograph's entity to event
-        $event['entity'] = $entity;
+            // move file to target directory and return its name
+            $newPhotoName = $this->fileUploader->upload($photoFile);
+
+            // asign name to Photograph's entity
+            $entity->setPhotoName($newPhotoName);
+
+            // return Photograph's entity to event
+            $event['entity'] = $entity;
+        }
     }
     
     public function removePhotosWhichBelongsToSession(GenericEvent $event) {

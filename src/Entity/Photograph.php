@@ -47,6 +47,11 @@ class Photograph
     private $updatedAt;
     
     /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="photographs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
@@ -54,7 +59,12 @@ class Photograph
 
 
     
-    public function getId()
+    public function __construct() {
+        
+        $this->isActive = true;
+    }
+
+        public function getId()
     {
         return $this->id;
     }
@@ -110,8 +120,20 @@ class Photograph
         
         return $this->updatedAt;
     }
+    
+    public function setActive(bool $bool) {
+        
+        $this->isActive = $bool;
 
-        /**
+        return $this;
+    }
+    
+    public function isActive() {
+        
+        return $this->isActive;
+    }
+
+    /**
      * Set session to photograph
      * 
      * @param \App\Entity\Session $session
