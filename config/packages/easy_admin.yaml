@@ -1,4 +1,6 @@
 easy_admin:
+    design:
+        brand_color: '#060f1c'
     site_name: 'Portfolio'
     list:
         actions:
@@ -12,38 +14,47 @@ easy_admin:
                 fields:
                     - 'name'
                     - 'description'
-                    - { property: 'active', type: 'checkbox' }
+                    - { property: 'active', type: 'checkbox', label: 'Is Active?' }
             list:
+                title:  'Session List'
                 fields:
                     - 'name'
                     - 'description'
-                    - { property: 'active', type: 'boolean' }
-#                    display photos count
+                    - { property: 'active', type: 'boolean', label: 'Is Active?' }
+                    - { property: 'photographs', label: 'Photo count' }
             show:
+                title:  'Session Show'
                 fields:
                     - 'name'
                     - 'description'
-                    - { property: 'active', type: 'boolean' }
+                    - { property: 'active', type: 'boolean', label: 'Is Active?' }
+            edit:
+                title:  'Session Edit'
         Photograph:
             class: App\Entity\Photograph
             form:
                 fields:
                     - 'name'
-                    - { property: 'photoFile', type: 'file', base_path: '%photographs_directory%' }
-                    - { property: 'active', type: 'checkbox' }
-                    - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false } }   
+                    - { property: 'photoFile', type: 'file', label: 'Upload photo', help: 'Select photo to upload or change' }
+                    - { property: 'active', type: 'checkbox', label: 'Is Active?' }
+                    - { property: 'session', type: 'entity', type_options: { class: 'App\Entity\Session', multiple: false } }
+            new:
+                fields:
+                    - { property: 'photoFile', type: 'file', label: 'Upload photo', help: 'Select photo to upload' }
             list:
+                title:  'Photo List'
                 fields:
                     - 'name'
-                    - 'photoPath'
-#                    - { property: 'photoPath', type: 'image' }
-                    - { property: 'active', type: 'boolean' }
+                    - { property: 'photoName', type: 'image', base_path: '%uri_prefix%' }
+                    - { property: 'active', type: 'boolean', label: 'Is Active?' }
                     - { property: 'session', type: 'text' }
             show:
+                title:  'Photo Show'
                 fields:
                     - 'name'
                     - 'updatedAt'
-                    - { property: 'photoName', type: 'image', base_path: '%photographs_directory%' }
-#                    - { property: 'photoPath', type: 'image' }   or this way ?
-                    - { property: 'active', type: 'boolean' }
-                    - { property: 'session', type: 'text' }                   
+                    - { property: 'photoName', type: 'image', base_path: '%uri_prefix%' }
+                    - { property: 'active', type: 'boolean', label: 'Is Active?' }
+                    - { property: 'session', type: 'text' }
+            edit:
+                title:  'Photo Edit'

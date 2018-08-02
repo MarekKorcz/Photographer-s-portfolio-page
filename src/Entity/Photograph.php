@@ -90,15 +90,8 @@ class Photograph
     {
         return $this->photoName;
     }
-    
-    // virtual method for displaying photos in easy admin's show and edit actions
-    public function getPhotoPath() 
-    {        
-        // this path still not working (TO FIX)
-        return './../public/uploads/photographs/' . $this->getPhotoName();
-    }
 
-        public function setPhotoFile(File $photo = null)
+    public function setPhotoFile(File $photo = null)
     {
         $this->photoFile = $photo;
 

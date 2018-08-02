@@ -11,13 +11,15 @@ use App\Entity\Session;
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
     private $fileUploader;
-    
-    // TODO: change it to global paramter value
-    private $targetDirectory = '/uploads/photographs/';
 
-    public function __construct(FileUploader $fileUploader)
+    private $photographsDirectory;
+    
+    private $blankPhotoName = '_blank.jpg';
+
+    public function __construct(FileUploader $fileUploader, $photographsDirectory)
     {
         $this->fileUploader = $fileUploader;
+        $this->photographsDirectory = $photographsDirectory;
     }
 
     public static function getSubscribedEvents()
@@ -53,7 +55,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         } else {
             
             // asign _blank to Photograph's entity name
-            $entity->setPhotoName('_blank');
+            $entity->setPhotoName($this->blankPhotoName);
             
             // disable default active state
             $entity->setActive(false);
@@ -80,9 +82,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         // check if new photo is passed to edit
         if ($photoFile) {
         
-            // download Photograph's name and remove previous photo from directory
-            $photoName = $entity->getPhotoName();
-            unlink($this->targetDirectory . $photoName);
+            $this->removeThePhotoIfItIsNotBlank($entity);
 
             // move file to target directory and return its name
             $newPhotoName = $this->fileUploader->upload($photoFile);
@@ -108,8 +108,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         
         foreach ($photos as $photo) {
             
-            // remove photo from directory
-            unlink($this->targetDirectory . $photo->getPhotoName());
+            $this->removeThePhotoIfItIsNotBlank($photo);
         }
         
         // return Photograph's entity to event
@@ -124,13 +123,21 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
         
-        // download Photograph's name
-        $photoName = $entity->getPhotoName();
-        
-        // remove photo from directory
-        unlink($this->targetDirectory . $photoName);
+        $this->removeThePhotoIfItIsNotBlank($entity);
         
         // return Photograph's entity to event
         $event['entity'] = $entity;
+    }
+    
+    private function removeThePhotoIfItIsNotBlank($entity) {
+        
+        // download Photograph's name
+        $photoName = $entity->getPhotoName();
+
+        if ($photoName != $this->blankPhotoName) {
+
+            // remove photo from directory
+            unlink($this->photographsDirectory . $photoName);
+        }
     }
 }

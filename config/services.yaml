@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    photographs_directory: '%kernel.project_dir%/public/uploads/photographs'
+    uri_prefix:            '/uploads/photographs/'
+    photographs_directory: '%kernel.project_dir%/public/uploads/photographs/'
 
 services:
     # default configuration for services in *this* file
@@ -31,3 +32,8 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%photographs_directory%'
+            
+    App\EventListener\EasyAdminSubscriber:
+        arguments:
+            $fileUploader:          '@App\Service\FileUploader'
+            $photographsDirectory:  '%photographs_directory%'
