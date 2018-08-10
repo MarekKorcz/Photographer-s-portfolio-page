@@ -8,10 +8,18 @@
             </div>
         </div>
         <div id="menu">
-             1 of 2
+            <h3>Menu</h3>
          </div>
          <div id="content">
-             2 of 2
+             <h2 style="text-align: center;">Content</h2>
+             <div id="photos">
+                <ul>
+                   {% for i in 0..30 %}
+                       <li class="photo-box">{{ i }} photo</li>
+                   {% endfor %}
+                </ul>
+               <div style="clear: both;"></div>
+            </div>
          </div>
          <div style="clear: both;"></div>
      </div>
@@ -28,10 +36,8 @@
     <script src="{{ asset('build/homepage.js') }}"></script>
     
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-            
-            console.log(event);
-            
+        document.addEventListener("DOMContentLoaded", function() {
+
             function init() {
                 
                 let content = document.getElementById("content");
@@ -113,7 +119,7 @@
                         
                         menuBtn.dataset.show = "true";
 
-                        showMenu(windowWidth);
+                        showMenuWithAnimiation();
                         hideContent();
                         
                     } else if (menuBtn.dataset.show === "true") {
@@ -121,12 +127,34 @@
                         menuBtn.dataset.show = "false";
                         
                         showContent(windowWidth);
-                        hideMenu();
+                        hideMenuWithAnimation();
                     }
                 }
             };
             document.addEventListener("click", toggleMenu);
                   
+            function showMenuWithAnimiation() {
+                
+                let menu = document.getElementById("menu");
+                
+                menu.classList.add("m-open");
+
+                menu.style.visibility = "visible";
+                menu.style.height = "1000px";                
+
+                changeMenuAnimationWidth();                
+            }
+            
+            function hideMenuWithAnimation() {
+                
+                let menu = document.getElementById("menu");
+                
+                menu.style.width = "0px";
+                menu.style.visibility = "hidden";
+                
+                menu.classList.remove("m-open");
+            }
+                    
             function showMenu(width = 200) {
                 
                 let menu = document.getElementById("menu");
@@ -149,8 +177,7 @@
                 let content = document.getElementById("content");
                 
                 content.style.visibility = "visible";
-                // it will be changed anyway
-                content.style.height = "100px";
+                content.style.height = "auto";
                 content.style.width = width + "px";
             }
             
@@ -160,6 +187,25 @@
                 
                 content.style.width = "0px";
                 content.style.visibility = "hidden";
+            }
+
+            function changeMenuAnimationWidth() {
+                
+                let styleSheetNUMBER = '2';
+
+                let windowWidth = window.innerWidth;
+                let cssRules = document.styleSheets[styleSheetNUMBER].cssRules;
+                let animationFrame;
+
+                for (var i = 0; i < cssRules.length; i++) {
+                    
+                    if (document.styleSheets[styleSheetNUMBER].cssRules[i].name === 'menu-open') {
+
+                        animationFrame = document.styleSheets[styleSheetNUMBER].cssRules[i];
+                    }
+                }
+                
+                animationFrame.appendRule('100% {width: ' + windowWidth + 'px;}');                
             }
             
             let onresize = function() {
@@ -187,12 +233,8 @@
                     
                     if (menu.style.visibility !== "visible") {
                         
-                        console.log('set menu to visible (more)');
-                        
                         showMenu();
                     }
-                    
-                    console.log('resize content (more)');
                     
                     content.style.width = contentWidth + "px";
                     content.style.visibility = "visible";
@@ -209,21 +251,15 @@
                         
                         if (menu.style.visibility === "visible") {
                         
-                            console.log('hide menu');
-
                             hideMenu();
                         }
                         
                     } else if (menuBtn.getAttribute("data-show") === "true") {
 
-                        console.log('it is set to true!');
-                        
                         menu.style.width = windowWidth + "px";
                         
                         return;
                     }
-                    
-                    console.log('resize content (less)');
                     
                     content.style.width = windowWidth + "px";
                     content.style.visibility = "visible";
@@ -255,11 +291,39 @@
             float: left;
         }
         
+        .m-open {
+            position: relative;
+            -webkit-animation-name: menu-open;
+            -webkit-animation-duration: 1s;
+            animation-name: menu-open;
+            animation-duration: 0.15s;
+            animation-fill-mode: forwards;
+        }
+        
+        @keyframes menu-open {
+            0%   {width: 0px;}
+            100% {width: 200px;}
+        }
+        
         #content {
-            height: 100px;
+            min-height: 1200px;
+            height: auto;
             background-color: aqua;
             visibility: hidden;
             float: right;
+        }
+        
+        #photos {
+            
+        }
+        
+        .photo-box {
+            margin: 25px;
+            list-style-type: none;
+            border: blueviolet solid 2px;
+            width: 14em;
+            height: 14em;
+            float: left;
         }
     </style>
 {% endblock %}
