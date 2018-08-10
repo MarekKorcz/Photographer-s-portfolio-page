@@ -11,8 +11,8 @@ Encore
     // will create public/build/app.js and public/build/app.css
      .addEntry('app', './assets/js/app.js')
      .addEntry('homepage', './assets/js/homepage.js')
+     .addStyleEntry('homepage_style', './assets/css/homepage.css')
      .addEntry('login', './assets/js/login.js')
-    // .addStyleEntry('css/app', './assets/css/app.scss')
     
     .createSharedEntry('vendor', [
         'jquery',

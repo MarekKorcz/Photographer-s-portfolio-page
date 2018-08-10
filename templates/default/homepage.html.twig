@@ -1,6 +1,20 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+    <div id="container">
+        <div id="heading">
+            <div id="title">
+                <h1>Hello on homepage, bitches!</h1>
+            </div>
+        </div>
+        <div id="menu">
+             1 of 2
+         </div>
+         <div id="content">
+             2 of 2
+         </div>
+         <div style="clear: both;"></div>
+     </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -12,4 +26,240 @@
     
     {# page specific scripts #}
     <script src="{{ asset('build/homepage.js') }}"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            
+            console.log(event);
+            
+            function init() {
+                
+                let content = document.getElementById("content");
+                let menu = document.getElementById("menu");
+                let windowWidth = window.innerWidth;
+                {# scroll bar takes away 15px #}
+                let contentWidth = windowWidth - 200 - 15;
+                
+                if (windowWidth > 740) {
+                                    
+                    menu.style.width = "200px";
+                    menu.style.visibility = "visible";
+                                    
+                    content.style.width = contentWidth + "px";
+                    content.style.visibility = "visible";
+                    
+                } else {
+                    
+                    pasteMenuBtn();
+                    
+                    menu.style.width = "0px";
+                    menu.style.visibility = "hidden";
+                    
+                    content.style.width = windowWidth + "px";
+                    content.style.visibility = "visible";
+                }
+            }
+            init();
+            
+            function createMenuBtn() {
+                
+                let button = document.createElement('button');
+                button.setAttribute('id', 'menuBtn');
+                button.dataset.show = "false";
+                // replace it with some menu picture in a future
+                button.innerHTML = "menu";
+                button.style.float = "left";
+                
+                return button;
+            }
+            
+            function createBlankElement() {
+                
+                let div = document.createElement('div');
+                div.setAttribute('id', 'blank');
+                div.style.clear = "both";
+                
+                return div;
+            }
+            
+            function pasteMenuBtn() {
+                
+                let menuBtn = createMenuBtn();
+                let blankElement = createBlankElement();
+                let heading = document.getElementById("heading");
+                let title = document.getElementById("title");
+                
+                heading.insertBefore(menuBtn, title);
+                heading.appendChild(blankElement);
+            }
+            
+            function removeMenuBtn() {
+                
+                document.getElementById("menuBtn").remove();
+                document.getElementById("blank").remove();
+            }
+            
+            // it shouldn't work if menu is not defined yet            
+            let toggleMenu = function(event) {
+                
+                var element = event.target;
+                
+                if(element.tagName === "BUTTON" && element.id === "menuBtn"){
+                    
+                    let menuBtn = document.getElementById("menuBtn");
+                    let windowWidth = window.innerWidth;
+
+                    if (menuBtn.dataset.show === "false") {
+                        
+                        menuBtn.dataset.show = "true";
+
+                        showMenu(windowWidth);
+                        hideContent();
+                        
+                    } else if (menuBtn.dataset.show === "true") {
+                        
+                        menuBtn.dataset.show = "false";
+                        
+                        showContent(windowWidth);
+                        hideMenu();
+                    }
+                }
+            };
+            document.addEventListener("click", toggleMenu);
+                  
+            function showMenu(width = 200) {
+                
+                let menu = document.getElementById("menu");
+                
+                menu.style.visibility = "visible";
+                menu.style.height = "1000px";
+                menu.style.width = width + "px";
+            }
+                    
+            function hideMenu() {
+                
+                let menu = document.getElementById("menu");
+                
+                menu.style.width = "0px";
+                menu.style.visibility = "hidden";
+            }
+            
+            function showContent(width) {
+                
+                let content = document.getElementById("content");
+                
+                content.style.visibility = "visible";
+                // it will be changed anyway
+                content.style.height = "100px";
+                content.style.width = width + "px";
+            }
+            
+            function hideContent() {
+                
+                let content = document.getElementById("content");
+                
+                content.style.width = "0px";
+                content.style.visibility = "hidden";
+            }
+            
+            let onresize = function() {
+                
+                let content = document.getElementById("content");
+                let windowWidth = window.innerWidth;
+                let menu = document.getElementById("menu");
+                let menuBtn = document.getElementById("menuBtn");
+                // scroll bar takes away 15px
+                let contentWidth = windowWidth - 200 - 15;
+
+                if (windowWidth > 740) {
+                    
+                    if (menuBtn) {
+                        // when resize back to more then 740px set data-show to false if its true
+                        if (menuBtn.getAttribute("data-show") === "true") {
+
+                            menuBtn.dataset.show = "false";
+
+                            hideMenu();
+                        }
+                        
+                        removeMenuBtn();
+                    }
+                    
+                    if (menu.style.visibility !== "visible") {
+                        
+                        console.log('set menu to visible (more)');
+                        
+                        showMenu();
+                    }
+                    
+                    console.log('resize content (more)');
+                    
+                    content.style.width = contentWidth + "px";
+                    content.style.visibility = "visible";
+                    
+                } else {
+                    
+                    if (!menuBtn) {
+                        
+                        // show menu buton in the left corner
+                        pasteMenuBtn();
+                    }
+                                    
+                    if (!menuBtn || menuBtn.getAttribute("data-show") === "false") {
+                        
+                        if (menu.style.visibility === "visible") {
+                        
+                            console.log('hide menu');
+
+                            hideMenu();
+                        }
+                        
+                    } else if (menuBtn.getAttribute("data-show") === "true") {
+
+                        console.log('it is set to true!');
+                        
+                        menu.style.width = windowWidth + "px";
+                        
+                        return;
+                    }
+                    
+                    console.log('resize content (less)');
+                    
+                    content.style.width = windowWidth + "px";
+                    content.style.visibility = "visible";
+                }
+            };
+            window.addEventListener("resize", onresize);
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/homepage_style.css') }}"/>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #heading {
+            text-align: center;
+        }
+    
+        #menu {
+            height: 1000px;
+            background-color: khaki;
+            visibility: hidden;
+            float: left;
+        }
+        
+        #content {
+            height: 100px;
+            background-color: aqua;
+            visibility: hidden;
+            float: right;
+        }
+    </style>
 {% endblock %}
