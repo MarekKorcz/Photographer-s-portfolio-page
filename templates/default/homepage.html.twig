@@ -40,6 +40,7 @@
 
             function init() {
                 
+                let heading = document.getElementById("heading");
                 let content = document.getElementById("content");
                 let menu = document.getElementById("menu");
                 let windowWidth = window.innerWidth;
@@ -47,6 +48,8 @@
                 let contentWidth = windowWidth - 200 - 15;
                 
                 if (windowWidth > 740) {
+                    
+                    heading.style.height = "90px";
                                     
                     menu.style.width = "200px";
                     menu.style.visibility = "visible";
@@ -55,6 +58,8 @@
                     content.style.visibility = "visible";
                     
                 } else {
+                    
+                    heading.style.height = "60px";
                     
                     pasteMenuBtn();
                     
@@ -118,9 +123,13 @@
                     if (menuBtn.dataset.show === "false") {
                         
                         menuBtn.dataset.show = "true";
-
+                        
                         showMenuWithAnimiation();
-                        hideContent();
+                        
+                        // wait 1 sec for animation end before hide content div
+                        setTimeout(function() {
+                            hideContent();
+                        }, 1000);
                         
                     } else if (menuBtn.dataset.show === "true") {
                         
@@ -139,6 +148,7 @@
                 
                 menu.classList.add("m-open");
 
+                menu.style.zIndex = "1";
                 menu.style.visibility = "visible";
                 menu.style.height = "1000px";                
 
@@ -149,6 +159,7 @@
                 
                 let menu = document.getElementById("menu");
                 
+                menu.style.zIndex = "auto";
                 menu.style.width = "0px";
                 menu.style.visibility = "hidden";
                 
@@ -210,6 +221,7 @@
             
             let onresize = function() {
                 
+                let heading = document.getElementById("heading");
                 let content = document.getElementById("content");
                 let windowWidth = window.innerWidth;
                 let menu = document.getElementById("menu");
@@ -218,6 +230,9 @@
                 let contentWidth = windowWidth - 200 - 15;
 
                 if (windowWidth > 740) {
+                    
+                    menu.classList.remove("m-open");                   
+                    heading.style.height = "90px";
                     
                     if (menuBtn) {
                         // when resize back to more then 740px set data-show to false if its true
@@ -240,6 +255,8 @@
                     content.style.visibility = "visible";
                     
                 } else {
+                    
+                    heading.style.height = "60px";
                     
                     if (!menuBtn) {
                         
@@ -292,11 +309,13 @@
         }
         
         .m-open {
-            position: relative;
+            position: absolute;
+            left: 0px;
+            top: 60px;
             -webkit-animation-name: menu-open;
             -webkit-animation-duration: 1s;
             animation-name: menu-open;
-            animation-duration: 0.15s;
+            animation-duration: 1s;
             animation-fill-mode: forwards;
         }
         

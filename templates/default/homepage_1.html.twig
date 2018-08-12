@@ -1,0 +1,364 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div id="heading" class="invisible">
+        <div id="menu-button" class="invisible">
+            MBtn
+        </div>
+        <div id="logo">
+            LOGO
+        </div>
+        <div id="header-spacing"></div>
+        <div id="contact-bar">
+            contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div id="menu" class="invisible">
+        Menu
+    </div>
+    <div id="content" class="invisible">
+        Content
+         {#<div id="photos">
+            <ul>
+               {% for i in 0..30 %}
+                   <li class="photo-box">{{ i }} photo</li>
+               {% endfor %}
+            </ul>
+           <div style="clear: both;"></div>
+        </div>#}
+     </div>
+     <div style="clear: both;"></div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('build/manifest.js') }}"></script>
+    <script src="{{ asset('build/vendor.js') }}"></script>
+    
+    {# common scripts and css #}
+    <script src="{{ asset('build/app.js') }}"></script>
+    
+    {# page specific scripts #}
+    <script src="{{ asset('build/homepage.js') }}"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            function init() {
+                
+                let heading = document.getElementById("heading");
+                let menuButton = document.getElementById("menu-button");
+                let logo = document.getElementById("logo");
+                let headerSpacing = document.getElementById("header-spacing");
+                let contactBar = document.getElementById("contact-bar");
+                let content = document.getElementById("content");
+                let menu = document.getElementById("menu");
+                let windowWidth = window.innerWidth;
+                
+                if (windowWidth > 740) {
+                    
+                    // header
+                    heading.classList.add("heading-normal");
+                    heading.classList.remove("invisible");
+                    
+                    logo.classList.add("col-2");
+                    headerSpacing.classList.add("col-1");
+                    contactBar.classList.add("col-9");
+                    
+                    // content
+                    menu.classList.add("col-3");
+                    menu.classList.remove("invisible");
+                    
+                    content.classList.add("col-9");
+                    content.classList.remove("invisible");
+                    
+                } else {
+                    
+                    // header
+                    heading.classList.add("heading-small");
+                    heading.classList.remove("invisible");
+                    
+                    menuButton.classList.add("col-1");
+                    menuButton.classList.remove("invisible");
+                    logo.classList.add("col-2");
+                    headerSpacing.classList.add("col-9");
+                    contactBar.classList.add("invisible");
+                    
+                    // content
+                    menu.classList.add("col-0");
+                    
+                    content.classList.add("col-12");
+                    content.classList.remove("invisible");
+                }
+            }
+            init();
+
+            let onresize = function() {
+                
+                let heading = document.getElementById("heading");
+                let menuButton = document.getElementById("menu-button");
+                let headerSpacing = document.getElementById("header-spacing");
+                let contactBar = document.getElementById("contact-bar");
+                let content = document.getElementById("content");
+                let windowWidth = window.innerWidth;
+                let menu = document.getElementById("menu");
+
+                if (windowWidth > 740) {
+                    
+                    // header
+                    if (String(heading.className.match(/heading-small/g)) === "heading-small") {
+                        
+                        heading.classList.remove("heading-small");
+                        heading.classList.add("heading-normal");
+                    }
+                    
+                    if (String(menuButton.className.match(/invisible/g)) !== "invisible") {
+                        
+                        menuButton.classList.add("invisible");
+                        menuButton.classList.remove("col-1");
+                    }
+                    
+                    if (String(headerSpacing.className.match(/col-9/g)) === "col-9") {
+                        
+                        headerSpacing.classList.remove("col-9");
+                        headerSpacing.classList.add("col-1");
+                    }
+                    
+                    if (String(contactBar.className.match(/invisible/g)) === "invisible") {
+                        
+                        contactBar.classList.remove("invisible");
+                        contactBar.classList.add("col-9");
+                    }
+                              
+                    // content
+                    if (String(menu.className.match(/col-0/g)) === "col-0") {
+                        
+                        menu.classList.remove("col-0");
+                        menu.classList.remove("invisible");
+                    }
+                    
+                    if (String(menu.className.match(/col-12/g)) === "col-12") {
+                        
+                        menu.classList.remove("col-12");
+                    }
+                    
+                    if (String(menu.className.match(/col-3/g)) !== "col-3") {
+                        
+                        menu.classList.add("col-3");
+                    }
+                    
+                    if (String(content.className.match(/col-0/g)) === "col-0") {
+                        
+                        content.classList.remove("col-0");
+                        content.classList.remove("invisible");
+                    }
+                    
+                    if (String(content.className.match(/col-12/g)) === "col-12") {
+                        
+                        content.classList.remove("col-12");
+                    }
+                    
+                    if (String(content.className.match(/col-9/g)) !== "col-9") {
+                        
+                        content.classList.add("col-9");
+                    }
+                    
+                } else {
+                    
+                    //header
+                    if (String(heading.className.match(/heading-normal/g)) === "heading-normal") {
+                        
+                        heading.classList.remove("heading-normal");
+                        heading.classList.add("heading-small");
+                    }
+                    
+                    if (String(menuButton.className.match(/invisible/g)) === "invisible") {
+                        
+                        menuButton.classList.remove("invisible");
+                        menuButton.classList.add("col-1");
+                    }
+                    
+                    if (String(headerSpacing.className.match(/col-1/g)) === "col-1") {
+                        
+                        headerSpacing.classList.remove("col-1");
+                        headerSpacing.classList.add("col-9");
+                    }
+                    
+                    if (String(contactBar.className.match(/col-9/g)) === "col-9") {
+                        
+                        contactBar.classList.remove("col-9");
+                        contactBar.classList.add("col-0");
+                        contactBar.classList.add("invisible");
+                    }
+                    
+                    // content
+                    if (String(heading.className.match(/m-open/g)) !== "m-open") {
+                        
+                        menu.classList.remove("col-3");
+                        menu.classList.add("col-0");
+                        menu.classList.add("invisible");
+
+                        content.classList.remove("col-9");
+                        content.classList.add("col-12");
+                    }
+                }
+            };
+            window.addEventListener("resize", onresize);
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/homepage_style.css') }}"/>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        #heading {
+            
+        }
+        
+        #menu-button {
+            padding: 0px;
+            background-color: grey;
+            float: left;
+        }
+        
+        #logo {
+            padding: 0px;
+            background-color: green;
+            float: left;
+        }
+        
+        #header-spacing {
+            background-color: pink;
+            float: left;
+        }
+        
+        #contact-bar {
+            background-color: cornflowerblue;
+            text-align: right;
+            float: left;
+        }
+        
+        .heading-normal {
+            height: 110px;
+        }
+        
+        .heading-small {
+            height: 60px;
+        }
+        
+        #content {
+            background-color: yellow;
+            border: 1px solid yellow;
+            float: left;
+        }
+    
+        #menu {
+            background-color: purple;
+            border: 1px solid purple;
+            float: left;
+        }
+        
+        .m-open {
+            
+        }
+        
+        @keyframes menu-open {
+            0%   {width: 0%;}
+            100% {width: 100%;}
+        }
+        
+        .m-close {
+            
+        }
+        
+        @keyframes menu-close {
+            0%   {width: 100%;}
+            100% {width: 0%;}
+        }
+        
+        #photos {
+            
+        }
+        
+        .photo-box {
+            
+        }
+        
+        .invisible {
+            visibility: hidden;
+            height: 0px;
+        }
+        
+        .col-0 {
+            width: 0%;
+        }
+        
+        .col-1 {
+            width: 8.33%;
+            padding: 15px;
+        }
+        
+        .col-2 {
+            width: 16.66%;
+            padding: 15px;
+        }
+        
+        .col-3 {
+            width: 25%;
+            padding: 15px;
+        }
+        
+        .col-4 {
+            width: 33.33%;
+            padding: 15px;
+        }
+        
+        .col-5 {
+            width: 41.66%;
+            padding: 15px;
+        }
+        
+        .col-6 {
+            width: 50%;
+            padding: 15px;
+        }
+        
+        .col-7 {
+            width: 58.33%;
+            padding: 15px;
+        }
+        
+        .col-8 {
+            width: 66.66%;
+            padding: 15px;
+        }
+        
+        .col-9 {
+            width: 75%;
+            padding: 15px;
+        }
+        
+        .col-10 {
+            width: 83.33%;
+            padding: 15px;
+        }
+        
+        .col-11 {
+            width: 91.66%;
+            padding: 15px;
+        }
+        
+        .col-12 {
+            width: 100%;
+            padding: 15px;
+        }
+    </style>
+{% endblock %}
