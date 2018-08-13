@@ -74,6 +74,7 @@
                     
                     // content
                     menu.classList.add("col-3");
+                    menu.classList.add("menu-config");
                     menu.classList.remove("invisible");
                     
                     content.classList.add("col-9");
@@ -165,6 +166,11 @@
                         menu.classList.add("col-3");
                     }
                     
+                    if (String(menu.className.match(/menu-config/g)) !== "menu-config") {
+                        
+                        menu.classList.add("menu-config");
+                    }
+                    
                     if (String(content.className.match(/col-0/g)) === "col-0") {
                         
                         content.classList.remove("col-0");
@@ -211,9 +217,10 @@
                     }
                     
                     // content
-                    if (String(heading.className.match(/m-open/g)) !== "m-open") {
+                    if (String(menu.className.match(/col-3/g)) === "col-3") {
                         
                         menu.classList.remove("col-3");
+                        menu.classList.remove("menu-config");
                         menu.classList.add("col-0");
                         menu.classList.add("invisible");
 
@@ -321,16 +328,20 @@
         }
     
         #menu {
-            background-color: purple;
-            border: 1px solid purple;
             float: left;
+        }
+        
+        .menu-config {
+            background-color: purple;
+            height: 800px;
+            border: 1px solid purple;
         }
         
         .m-open {
             position: absolute;
             background-color: purple;
             z-index: 1;
-            height: 1000px;
+            height: 800px;
             left: 0px;
             top: 60px;
             -webkit-animation-name: menu-open;
@@ -348,9 +359,7 @@
         .m-close {
             position: absolute;
             background-color: purple;
-
-
-            height: 1000px;
+            height: 800px;
             left: 0px;
             top: 60px;
             -webkit-animation-name: menu-close;
