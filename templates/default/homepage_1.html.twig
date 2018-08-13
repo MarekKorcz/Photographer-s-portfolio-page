@@ -1,34 +1,36 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div id="heading" class="invisible">
-        <div id="menu-button" class="invisible">
-            MBtn
+    <div id="container">
+        <div id="heading" class="invisible">
+            <div id="menu-button" class="invisible">
+                <button id="MBtn">MBtn</button>
+            </div>
+            <div id="logo">
+                LOGO
+            </div>
+            <div id="header-spacing"></div>
+            <div id="contact-bar">
+                contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
+            </div>
+            <div style="clear: both;"></div>
         </div>
-        <div id="logo">
-            LOGO
+        <div id="menu" class="invisible">
+            Menu
         </div>
-        <div id="header-spacing"></div>
-        <div id="contact-bar">
-            contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
-        </div>
-        <div style="clear: both;"></div>
-    </div>
-    <div id="menu" class="invisible">
-        Menu
-    </div>
-    <div id="content" class="invisible">
-        Content
-         {#<div id="photos">
-            <ul>
-               {% for i in 0..30 %}
-                   <li class="photo-box">{{ i }} photo</li>
-               {% endfor %}
-            </ul>
-           <div style="clear: both;"></div>
-        </div>#}
+        <div id="content" class="invisible">
+            Content
+             {#<div id="photos">
+                <ul>
+                   {% for i in 0..30 %}
+                       <li class="photo-box">{{ i }} photo</li>
+                   {% endfor %}
+                </ul>
+               <div style="clear: both;"></div>
+            </div>#}
+         </div>
+         <div style="clear: both;"></div>
      </div>
-     <div style="clear: both;"></div>
 {% endblock %}
 
 {% block javascripts %}
@@ -44,10 +46,14 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
+            let MBtn = document.getElementById("MBtn");
+            
+            // initial configuration
             function init() {
                 
                 let heading = document.getElementById("heading");
                 let menuButton = document.getElementById("menu-button");
+                let MBtn = document.getElementById("MBtn");                
                 let logo = document.getElementById("logo");
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
@@ -61,6 +67,7 @@
                     heading.classList.add("heading-normal");
                     heading.classList.remove("invisible");
                     
+                    MBtn.disabled = true;
                     logo.classList.add("col-2");
                     headerSpacing.classList.add("col-1");
                     contactBar.classList.add("col-9");
@@ -93,15 +100,18 @@
             }
             init();
 
+            // on resize browser window
             let onresize = function() {
                 
                 let heading = document.getElementById("heading");
                 let menuButton = document.getElementById("menu-button");
+                let MBtn = document.getElementById("MBtn");
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
                 let content = document.getElementById("content");
                 let windowWidth = window.innerWidth;
                 let menu = document.getElementById("menu");
+                let menuPop = document.getElementById("menu-pop");
 
                 if (windowWidth > 740) {
                     
@@ -116,6 +126,7 @@
                         
                         menuButton.classList.add("invisible");
                         menuButton.classList.remove("col-1");
+                        MBtn.disabled = true;
                     }
                     
                     if (String(headerSpacing.className.match(/col-9/g)) === "col-9") {
@@ -129,8 +140,15 @@
                         contactBar.classList.remove("invisible");
                         contactBar.classList.add("col-9");
                     }
-                              
+                      
                     // content
+                    if (menuPop !== null) {
+
+                        menuPop.remove();
+                        MBtn.dataset.show = "false";
+
+                    }
+                    
                     if (String(menu.className.match(/col-0/g)) === "col-0") {
                         
                         menu.classList.remove("col-0");
@@ -176,6 +194,7 @@
                         
                         menuButton.classList.remove("invisible");
                         menuButton.classList.add("col-1");
+                        MBtn.disabled = false;
                     }
                     
                     if (String(headerSpacing.className.match(/col-1/g)) === "col-1") {
@@ -204,6 +223,39 @@
                 }
             };
             window.addEventListener("resize", onresize);
+            
+             // click menu button event listener
+            MBtn.addEventListener("click", function(){
+
+                let container = document.getElementById("container");
+                let menuPop = document.getElementById("menu-pop");
+                
+                if (menuPop === null && MBtn.dataset.show === "false" || MBtn.dataset.show === undefined) {
+
+                    let menuPop = document.createElement('div');
+                    menuPop.setAttribute('id', 'menu-pop');
+                    container.append(menuPop);
+
+                    menuPop.classList.add("m-open");
+                    
+                    // wait 1 sec for animation end before setting data-show to false
+                    setTimeout(function() {
+                        MBtn.dataset.show = "true";
+                    }, 1000);
+                    
+                } else if (menuPop !== null && MBtn.dataset.show === "true") {
+
+                    MBtn.dataset.show = "false";
+                    
+                    menuPop.classList.remove("m-open");
+                    menuPop.classList.add("m-close");
+                    
+                    // wait 1 sec for animation end before hide menu and set data-show to false
+                    setTimeout(function() {
+                        menuPop.remove();
+                    }, 1000);
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -219,6 +271,11 @@
             box-sizing: border-box;
         }
         
+        #container {
+
+        
+        }
+        
         #heading {
             
         }
@@ -227,6 +284,9 @@
             padding: 0px;
             background-color: grey;
             float: left;
+        }
+        
+        #MBtn {
         }
         
         #logo {
@@ -267,7 +327,17 @@
         }
         
         .m-open {
-            
+            position: absolute;
+            background-color: purple;
+            z-index: 1;
+            height: 1000px;
+            left: 0px;
+            top: 60px;
+            -webkit-animation-name: menu-open;
+            -webkit-animation-duration: 1s;
+            animation-name: menu-open;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
         }
         
         @keyframes menu-open {
@@ -276,7 +346,17 @@
         }
         
         .m-close {
-            
+            position: absolute;
+            background-color: purple;
+
+
+            height: 1000px;
+            left: 0px;
+            top: 60px;
+            -webkit-animation-name: menu-close;
+            -webkit-animation-duration: 1s;
+            animation-name: menu-close;
+            animation-duration: 1s;
         }
         
         @keyframes menu-close {
