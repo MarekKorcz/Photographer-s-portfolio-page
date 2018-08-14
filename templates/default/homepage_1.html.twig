@@ -151,6 +151,7 @@
                     // content
                     if (menuPop !== null) {
 
+                        content.classList.remove("invisible");
                         menuPop.remove();
                         MBtn.dataset.show = "false";
 
@@ -251,6 +252,7 @@
             MBtn.addEventListener("click", function(){
 
                 let container = document.getElementById("container");
+                let content = document.getElementById("content");
                 let menuPop = document.getElementById("menu-pop");
                 
                 if (menuPop === null && MBtn.dataset.show === "false" || MBtn.dataset.show === undefined) {
@@ -263,11 +265,14 @@
                     
                     // wait 1 sec for animation end before setting data-show to false
                     setTimeout(function() {
+                        content.classList.add("invisible");
                         MBtn.dataset.show = "true";
                     }, 1000);
                     
                 } else if (menuPop !== null && MBtn.dataset.show === "true") {
 
+                    content.classList.remove("invisible");
+                    
                     MBtn.dataset.show = "false";
                     
                     menuPop.classList.remove("m-open");
@@ -406,7 +411,7 @@
             position: absolute;
             background-color: purple;
             z-index: 1;
-            height: 800px;
+            height: 1000px;
             left: 0px;
             top: 60px;
             -webkit-animation-name: menu-open;
@@ -424,7 +429,7 @@
         .m-close {
             position: absolute;
             background-color: purple;
-            height: 800px;
+            height: 1000px;
             left: 0px;
             top: 60px;
             -webkit-animation-name: menu-close;
@@ -470,6 +475,8 @@
             padding: 20px;
             font-size: 30px;
             text-align: center;
+
+
         }
         
         .invisible {
