@@ -250,7 +250,7 @@
             };
             window.addEventListener("resize", onresize);
             
-             // click menu button event listener
+            // click menu button event listener
             MBtn.addEventListener("click", function(){
 
                 let container = document.getElementById("container");
@@ -261,29 +261,19 @@
 
                     let menuPop = document.createElement('div');
                     menuPop.setAttribute('id', 'menu-pop');
+                    menuPop.classList.add("m-open");
+
                     container.append(menuPop);
 
-                    menuPop.classList.add("m-open");
-                    
-                    // wait 1 sec for animation end before setting data-show to false
-                    setTimeout(function() {
-                        content.classList.add("invisible");
-                        MBtn.dataset.show = "true";
-                    }, 1000);
+                    content.classList.add("invisible");
+                    MBtn.dataset.show = "true";
                     
                 } else if (menuPop !== null && MBtn.dataset.show === "true") {
 
                     content.classList.remove("invisible");
+                    menuPop.remove();
                     
                     MBtn.dataset.show = "false";
-                    
-                    menuPop.classList.remove("m-open");
-                    menuPop.classList.add("m-close");
-                    
-                    // wait 1 sec for animation end before hide menu and set data-show to false
-                    setTimeout(function() {
-                        menuPop.remove();
-                    }, 1000);
                 }
             });
             
@@ -481,37 +471,12 @@
         .m-open {
             position: absolute;
             background-color: purple;
+            padding: 60px 30px;
             z-index: 1;
+            width: 100%;
             height: 1000px;
             left: 0px;
             top: 60px;
-            -webkit-animation-name: menu-open;
-            -webkit-animation-duration: 1s;
-            animation-name: menu-open;
-            animation-duration: 1s;
-            animation-fill-mode: forwards;
-        }
-        
-        @keyframes menu-open {
-            0%   {width: 0%;}
-            100% {width: 100%;}
-        }
-        
-        .m-close {
-            position: absolute;
-            background-color: purple;
-            height: 1000px;
-            left: 0px;
-            top: 60px;
-            -webkit-animation-name: menu-close;
-            -webkit-animation-duration: 1s;
-            animation-name: menu-close;
-            animation-duration: 1s;
-        }
-        
-        @keyframes menu-close {
-            0%   {width: 100%;}
-            100% {width: 0%;}
         }
         
         #photos {
