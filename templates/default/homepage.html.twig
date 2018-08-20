@@ -4,7 +4,10 @@
     <div id="container">
         <div id="heading" class="invisible">
             <div id="menu-button" class="invisible">
-                <button>MBtn</button>
+                {#<button>MBtn</button>#}
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
             </div>
             <div id="logo">
                 LOGO
@@ -111,16 +114,25 @@
             let onresize = function() {
                 
                 let heading = document.getElementById("heading");
-                let menuButton = document.getElementById("menu-button");
+                
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
                 let content = document.getElementById("content");
                 let gridContainer = document.getElementById("grid-container");
                 let windowWidth = window.innerWidth;
                 let menu = document.getElementById("menu");
+                let menuButton = document.getElementById("menu-button");
                 let menuPop = document.getElementById("menu-pop");
 
                 if (windowWidth > 740) {
+                    
+                    if (menuPop !== null) {
+
+                        menuPop.remove();
+                        content.classList.remove("invisible");
+                        
+                        menuButton.classList.remove("change");
+                    }
                     
                     // header
                     if (String(heading.className.match(/heading-small/g)) === "heading-small") {
@@ -148,12 +160,6 @@
                     }
                       
                     // content
-                    if (menuPop !== null) {
-
-                        content.classList.remove("invisible");
-                        menuPop.remove();
-                    }
-                    
                     if (String(menu.className.match(/col-0/g)) === "col-0") {
                         
                         menu.classList.remove("col-0");
@@ -252,16 +258,21 @@
                 let menuPop = document.getElementById("menu-pop");
                 
                 if (menuPop === null) {
+                    
+                    menuButton.classList.add("change");
 
                     let menuPop = document.createElement('div');
                     menuPop.setAttribute('id', 'menu-pop');
                     menuPop.classList.add("m-open");
+                    pasteMenuContent(menuPop);
 
                     container.append(menuPop);
 
                     content.classList.add("invisible");
                     
                 } else {
+                    
+                    menuButton.classList.remove("change");
 
                     content.classList.remove("invisible");
                     menuPop.remove();
@@ -398,13 +409,36 @@
         }
         
         #menu-button {
+            display: inline-block;
+            cursor: pointer;
+            
             padding: 0px;
-            background-color: grey;
             float: left;
+        }
+        
+        .bar1, .bar2, .bar3 {
+            width: 35px;
+            height: 5px;
+            background-color: #333;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+        
+        .change .bar1 {
+            -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+            transform: rotate(-45deg) translate(-9px, 6px);
+        }
+
+        .change .bar2 {opacity: 0;}
+
+        .change .bar3 {
+            -webkit-transform: rotate(45deg) translate(-8px, -8px);
+            transform: rotate(45deg) translate(-8px, -8px);
         }
         
         #logo {
             padding: 0px;
+            height: 90px;
             background-color: green;
             float: left;
         }
