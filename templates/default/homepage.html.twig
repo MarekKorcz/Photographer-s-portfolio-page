@@ -16,7 +16,6 @@
             <div style="clear: both;"></div>
         </div>
         <div id="menu" class="invisible">
-            Menu
         </div>
         <div id="content" class="invisible">
             <div id="photos">
@@ -78,6 +77,8 @@
                     menu.classList.add("menu-config");
                     menu.classList.remove("invisible");
                     
+                    pasteMenuContent(menu);
+                    
                     content.classList.add("col-9");
                     content.classList.remove("invisible");
                     
@@ -97,6 +98,8 @@
                     
                     // content
                     menu.classList.add("col-0");
+                    
+                    pasteMenuContent(menu);
                     
                     content.classList.add("col-12");
                     content.classList.remove("invisible");
@@ -332,6 +335,63 @@
                     }
                 });
             }
+                                
+            function createAndPasteMenuList(params, anchor) {
+                
+                let menuList = document.createElement('div');
+                menuList.setAttribute('id', 'menu-list');
+                    
+                let sessionHeader = document.createElement('p');
+                sessionHeader.innerHTML = "Sessions";
+                
+                menuList.appendChild(sessionHeader);
+                
+                let sessionUnorderedList = document.createElement('ul');
+                sessionUnorderedList.setAttribute('id', 'sessions');
+                
+                for (var i = 0; i < params.length; i++) {
+                    
+                    let sessionListElement = document.createElement('li');
+                    sessionListElement.innerHTML = params[i];
+                    
+                    sessionUnorderedList.appendChild(sessionListElement);
+                }
+                
+                menuList.appendChild(sessionUnorderedList);
+                
+                let about = document.createElement('p');
+                // add link to redirect
+                about.innerHTML = "About";
+                
+                menuList.appendChild(about);
+                
+                let contact = document.createElement('p');
+                // add link to redirect
+                contact.innerHTML = "Contact";
+                
+                menuList.appendChild(contact);
+                
+                // add social medias
+                
+                anchor.append(menuList);
+            }
+            
+            // use it wherever needed
+            async function getMenuList(url, anchor) {
+                const response = await fetch(url);
+                const json = await response.json();
+                const listOfSessions = json.map(session => session.name);
+
+                createAndPasteMenuList(listOfSessions, anchor);
+            }
+            
+            function pasteMenuContent(anchor) {
+                
+                // TO CHANGE AFTER DEPLOY
+                let url = "http://localhost:8000/get-sessions";
+            
+                getMenuList(url, anchor);
+            }            
         });
     </script>
 {% endblock %}
@@ -401,9 +461,21 @@
         }
         
         .menu-config {
-            background-color: purple;
+{#            why this shit does not work??#}
+            padding: 60px 30px;
+            
             height: 800px;
-            border: 1px solid purple;
+            font-size: 16px;
+            line-height: 25px;
+        }
+        
+        #menu-list > p {
+            font-weight: bold;
+        }
+        
+        #sessions {
+            padding-left: 13px;
+            list-style-type: none;
         }
         
         .m-open {
@@ -474,8 +546,6 @@
             padding: 20px;
             font-size: 30px;
             text-align: center;
-
-
         }
         
         .invisible {
