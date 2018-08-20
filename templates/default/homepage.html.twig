@@ -4,7 +4,7 @@
     <div id="container">
         <div id="heading" class="invisible">
             <div id="menu-button" class="invisible">
-                <button id="MBtn">MBtn</button>
+                <button>MBtn</button>
             </div>
             <div id="logo">
                 LOGO
@@ -45,14 +45,13 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            let MBtn = document.getElementById("MBtn");
+            let menuButton = document.getElementById("menu-button");  
             
             // initial configuration
             function init() {
                 
                 let heading = document.getElementById("heading");
-                let menuButton = document.getElementById("menu-button");
-                let MBtn = document.getElementById("MBtn");                
+                let menuButton = document.getElementById("menu-button");             
                 let logo = document.getElementById("logo");
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
@@ -67,7 +66,6 @@
                     heading.classList.add("heading-normal");
                     heading.classList.remove("invisible");
                     
-                    MBtn.disabled = true;
                     logo.classList.add("col-2");
                     headerSpacing.classList.add("col-1");
                     contactBar.classList.add("col-9");
@@ -114,7 +112,6 @@
                 
                 let heading = document.getElementById("heading");
                 let menuButton = document.getElementById("menu-button");
-                let MBtn = document.getElementById("MBtn");
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
                 let content = document.getElementById("content");
@@ -136,7 +133,6 @@
                         
                         menuButton.classList.add("invisible");
                         menuButton.classList.remove("col-1");
-                        MBtn.disabled = true;
                     }
                     
                     if (String(headerSpacing.className.match(/col-9/g)) === "col-9") {
@@ -156,7 +152,6 @@
 
                         content.classList.remove("invisible");
                         menuPop.remove();
-                        MBtn.dataset.show = "false";
                     }
                     
                     if (String(menu.className.match(/col-0/g)) === "col-0") {
@@ -214,7 +209,6 @@
                         
                         menuButton.classList.remove("invisible");
                         menuButton.classList.add("col-1");
-                        MBtn.disabled = false;
                     }
                     
                     if (String(headerSpacing.className.match(/col-1/g)) === "col-1") {
@@ -251,13 +245,13 @@
             window.addEventListener("resize", onresize);
             
             // click menu button event listener
-            MBtn.addEventListener("click", function(){
+            menuButton.addEventListener("click", function(){
 
                 let container = document.getElementById("container");
                 let content = document.getElementById("content");
                 let menuPop = document.getElementById("menu-pop");
                 
-                if (menuPop === null && MBtn.dataset.show === "false" || MBtn.dataset.show === undefined) {
+                if (menuPop === null) {
 
                     let menuPop = document.createElement('div');
                     menuPop.setAttribute('id', 'menu-pop');
@@ -266,14 +260,11 @@
                     container.append(menuPop);
 
                     content.classList.add("invisible");
-                    MBtn.dataset.show = "true";
                     
-                } else if (menuPop !== null && MBtn.dataset.show === "true") {
+                } else {
 
                     content.classList.remove("invisible");
                     menuPop.remove();
-                    
-                    MBtn.dataset.show = "false";
                 }
             });
             
@@ -410,9 +401,6 @@
             padding: 0px;
             background-color: grey;
             float: left;
-        }
-        
-        #MBtn {
         }
         
         #logo {
