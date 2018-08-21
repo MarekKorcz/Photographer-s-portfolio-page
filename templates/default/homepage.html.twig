@@ -25,7 +25,7 @@
                 <div id="grid-container">
                     {% for i in 1..30 %}
                        <div id="grid-item">
-                           {{ i }}
+                            <img src="{{ asset('3ff56f659513a0bd520d63e7b6edd8dd.jpeg', 'photographs') }}" width="100%" height="100%">
                        </div>
                     {% endfor %}
                 </div>
@@ -399,9 +399,17 @@
                 };
 
                 const response = await fetch(url, options);
-                const json = await response.json();
+                const photosNames = await response.json();
+                
+                
+                
 
-                console.log(json);
+                console.log(photosNames);
+                
+                
+                
+                
+                
             }
             
             // click on specific menu li element event listener
@@ -545,30 +553,28 @@
         .grid-container-2 {
             display: grid;
             grid-template-columns: auto auto;
-            grid-gap: 70px;
-            padding: 20px;
+            grid-gap: 2px;
+            padding: 2px;
         }
         
         .grid-item-2 {
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.8);
-            padding: 40px;
-            font-size: 50px;
+            padding: 2px;
             text-align: center;
         }
         
         .grid-container-3 {
             display: grid;
             grid-template-columns: auto auto auto;
-            grid-gap: 50px;
-            padding: 10px;
+            grid-gap: 5px;
+            padding: 5px;
         }
         
         .grid-item-3 {
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            font-size: 30px;
+            padding: 5px;
             text-align: center;
         }
         

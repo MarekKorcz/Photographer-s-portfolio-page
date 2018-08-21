@@ -65,19 +65,24 @@ class DefaultController extends AbstractController {
      */
     public function getPhotos(Request $request) {
         
-        $data = json_decode($request->getContent());
+        $requestData = json_decode($request->getContent());
 
-        $session = $request->request->get('sessionName');
-        
-//        $session = $data['sessionName'];
+        $session = $requestData->sessionName;
         
         if ($session) {
             
-            $photos = $this->getDoctrine()->getManager()->getRepository('App\Entity\Photograph')->findBy(array(
-                "session" => $session
+            $session = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findOneBy(array(
+                "name" => $session
             ));
             
-            if ($photos) {
+            $photosNames = array();
+            
+            foreach($session->getPhotographs() as $photo) {
+                
+                array_push($photosNames, $photo->getPhotoName());
+            }
+            
+            if (is_array($photosNames)) {
 
                 $encoders = array(
                     new JsonEncoder()
@@ -93,7 +98,7 @@ class DefaultController extends AbstractController {
 
                 $serializer = new Serializer($normalizers, $encoders);
 
-                $data = $serializer->serialize($photos, 'json');
+                $data = $serializer->serialize($photosNames, 'json');
 
                 return new JsonResponse($data, 200, array(), true);
             }
@@ -101,8 +106,7 @@ class DefaultController extends AbstractController {
         
         return new JsonResponse(array(
             'type'    => 'error',
-            'message' => 'No data',
-            'session' => $data
+            'message' => 'No data'
         ));
     }
 }
