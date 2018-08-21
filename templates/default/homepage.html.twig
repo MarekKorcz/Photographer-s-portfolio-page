@@ -368,7 +368,6 @@
                 anchor.append(menuList);
             }
             
-            // use it wherever needed
             async function getMenuList(url, anchor) {
                 const response = await fetch(url);
                 const json = await response.json();
@@ -383,7 +382,41 @@
                 let url = "http://localhost:8000/get-sessions";
             
                 getMenuList(url, anchor);
-            }            
+            }
+            
+            async function getPhotos(url, sessionName, anchor) {
+                
+                const data = {
+                    sessionName: sessionName
+                };
+
+                const options = {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+
+                const response = await fetch(url, options);
+                const json = await response.json();
+
+                console.log(json);
+            }
+            
+            // click on specific menu li element event listener
+            document.addEventListener('click', function(event) {
+
+                if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
+                    
+                    // TO CHANGE AFTER DEPLOY
+                    let url = "http://localhost:8000/get-photos";
+                    
+                    let sessionName = event.target.innerHTML;
+                    
+                    getPhotos(url, sessionName);
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -483,6 +516,10 @@
         
         #menu-list > p {
             font-weight: bold;
+        }
+        
+        ul#sessions > li {
+            cursor: pointer;
         }
         
         #sessions {
