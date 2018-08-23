@@ -4,7 +4,6 @@
     <div id="container">
         <div id="heading" class="invisible">
             <div id="menu-button" class="invisible">
-                {#<button>MBtn</button>#}
                 <div class="bar1"></div>
                 <div class="bar2"></div>
                 <div class="bar3"></div>
@@ -22,13 +21,7 @@
         </div>
         <div id="content" class="invisible">
             <div id="photos">
-                <div id="grid-container">
-                    {% for i in 1..30 %}
-                       <div id="grid-item">
-                            <img src="{{ asset('3ff56f659513a0bd520d63e7b6edd8dd.jpeg', 'photographs') }}" width="100%" height="100%">
-                       </div>
-                    {% endfor %}
-                </div>
+                <div id="grid-container"></div>
             </div>
          </div>
          <div style="clear: both;"></div>
@@ -49,6 +42,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             
             let menuButton = document.getElementById("menu-button");  
+            let gridContainer = document.getElementById("grid-container");
             
             // initial configuration
             function init() {
@@ -83,7 +77,10 @@
                     content.classList.add("col-9");
                     content.classList.remove("invisible");
                     
-                    switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
+                    showPhotosBySessionName('Cats');
+                    setTimeout(function(){
+                        switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
+                    }, 300);
                     
                 } else {
                     
@@ -105,7 +102,10 @@
                     content.classList.add("col-12");
                     content.classList.remove("invisible");
                     
-                    switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
+                    showPhotosBySessionName('Cats');
+                    setTimeout(function(){
+                        switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
+                    }, 300);
                 }
             }
             init();
@@ -285,46 +285,44 @@
                 // if not, add passed one
                 // if has already gridContainerClass, remove old one and switch to passed one
                 if (anchor.classList.length === 0) {
-                    
+
                     anchor.classList.add(gridContainerClassName);
-                    
+
                 } else if (String(anchor.className.match(/grid-container-3/g)) === "grid-container-3") {
-                        
+
                     anchor.classList.remove("grid-container-3");
                     anchor.classList.add(gridContainerClassName);
-                    
+
                 } else if (String(anchor.className.match(/grid-container-2/g)) === "grid-container-2") {
-                        
+
                     anchor.classList.remove("grid-container-2");
                     anchor.classList.add(gridContainerClassName);
                 }
-                
+
                 // transform variable with anchor's children NodeList elements to Array
                 let children = Array.from(anchor.childNodes);
-                
-                children.forEach(function(item, index){
-                    
-                    // remove [object Text] elements
-                    if(index % 2 !== 0) {
-                        
-                        // check if child item has any grid item class
-                        // if not, add passed one
-                        // if has already gridItemClass, remove old one and switch to passed one
-                        if (item.classList.length === 0) {
 
-                            item.classList.add(gridItemClassName);
+                children.forEach(function(item){
 
-                        } else if (String(item.className.match(/grid-item-3/g)) === "grid-item-3") {
+                    // check if child item has any grid item class
+                    // if not, add passed one
+                    // if has already gridItemClass, remove old one and switch to passed one
+                    if (String(item.className.match(/invisible/g)) === "invisible") {
 
-                            item.classList.remove("grid-item-3");
-                            item.classList.add(gridItemClassName);
+                        item.classList.add(gridItemClassName);
 
-                        } else if (String(item.className.match(/grid-item-2/g)) === "grid-item-2") {
+                    } else if (String(item.className.match(/grid-item-3/g)) === "grid-item-3") {
 
-                            item.classList.remove("grid-item-2");
-                            item.classList.add(gridItemClassName);
-                        }
+                        item.classList.remove("grid-item-3");
+                        item.classList.add(gridItemClassName);
+
+                    } else if (String(item.className.match(/grid-item-2/g)) === "grid-item-2") {
+
+                        item.classList.remove("grid-item-2");
+                        item.classList.add(gridItemClassName);
                     }
+
+                    item.classList.remove("invisible");
                 });
             }
                                 
@@ -383,8 +381,25 @@
             
                 getMenuList(url, anchor);
             }
+                    
+            function createAndPasteSessionPhotos(params) {
+                
+                for (var i = 0; i < params.length; i++) {
+                    
+                    let gridItemElement = document.createElement('div');
+                    gridItemElement.classList.add("invisible");
+                    
+                    let imageElement = document.createElement('img');
+                    imageElement.src = '/uploads/photographs/' + params[i];
+                    
+                    gridItemElement.appendChild(imageElement);
+                    gridContainer.appendChild(gridItemElement);
+                }
+            }              
             
-            async function getPhotos(url, sessionName, anchor) {
+            async function getPhotos(sessionName) {
+                
+                let url = "http://localhost:8000/get-photos";
                 
                 const data = {
                     sessionName: sessionName
@@ -401,15 +416,20 @@
                 const response = await fetch(url, options);
                 const photosNames = await response.json();
                 
-                
-                
+                createAndPasteSessionPhotos(photosNames);
+            }
+            
+            function showPhotosBySessionName(sessionName) {
+            
+                if (gridContainer.hasChildNodes()) {
+                    
+                    while (gridContainer.firstChild) {
+                        
+                        gridContainer.removeChild(gridContainer.firstChild);
+                    }
+                }
 
-                console.log(photosNames);
-                
-                
-                
-                
-                
+                getPhotos(sessionName);
             }
             
             // click on specific menu li element event listener
@@ -422,7 +442,18 @@
                     
                     let sessionName = event.target.innerHTML;
                     
+                    
+                    
+                    
+                    // todo: finish changing sessions
+                    
+                    // in a future showPhotosBySessionName()
                     getPhotos(url, sessionName);
+                    
+                    
+                    
+                    
+                    
                 }
             });
         });
@@ -438,6 +469,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        
+        img {
+            width: 100%;
+            height: 100%;
         }
         
         #container {
@@ -479,7 +515,7 @@
         
         #logo {
             padding: 0px;
-            height: 90px;
+            height: 60px;
             background-color: green;
             float: left;
         }
@@ -554,13 +590,11 @@
             display: grid;
             grid-template-columns: auto auto;
             grid-gap: 2px;
-            padding: 2px;
         }
         
         .grid-item-2 {
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.8);
-            padding: 2px;
             text-align: center;
         }
         
@@ -568,13 +602,11 @@
             display: grid;
             grid-template-columns: auto auto auto;
             grid-gap: 5px;
-            padding: 5px;
         }
         
         .grid-item-3 {
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.8);
-            padding: 5px;
             text-align: center;
         }
         
