@@ -74,13 +74,13 @@
                     contactBar.classList.add("col-9");
                     
                     // content
-                    menu.classList.add("col-3");
+                    menu.classList.add("col-2");
                     menu.classList.add("menu-config");
                     menu.classList.remove("invisible");
                     
                     pasteMenuContent(menu);
                     
-                    content.classList.add("col-9");
+                    content.classList.add("col-10");
                     content.classList.remove("invisible");
                     
                     {#showPhotosBySessionName('Cats');
@@ -181,9 +181,9 @@
                         menu.classList.remove("col-12");
                     }
                     
-                    if (String(menu.className.match(/col-3/g)) !== "col-3") {
+                    if (String(menu.className.match(/col-2/g)) !== "col-2") {
                         
-                        menu.classList.add("col-3");
+                        menu.classList.add("col-2");
                     }
                     
                     if (String(menu.className.match(/menu-config/g)) !== "menu-config") {
@@ -202,9 +202,9 @@
                         content.classList.remove("col-12");
                     }
                     
-                    if (String(content.className.match(/col-9/g)) !== "col-9") {
+                    if (String(content.className.match(/col-10/g)) !== "col-10") {
                         
-                        content.classList.add("col-9");
+                        content.classList.add("col-10");
                     }
                     
                     if (String(gridContainer.className.match(/grid-container-2/g)) === "grid-container-2") {
@@ -241,14 +241,14 @@
                     }
                     
                     // content
-                    if (String(menu.className.match(/col-3/g)) === "col-3") {
+                    if (String(menu.className.match(/col-2/g)) === "col-2") {
                         
-                        menu.classList.remove("col-3");
+                        menu.classList.remove("col-2");
                         menu.classList.remove("menu-config");
                         menu.classList.add("col-0");
                         menu.classList.add("invisible");
 
-                        content.classList.remove("col-9");
+                        content.classList.remove("col-10");
                         content.classList.add("col-12");
                     }
                     
@@ -469,9 +469,15 @@
                         let item = "";
 
                         if (menuPop) {
+                            
+                            let content = document.getElementById("content");
 
                             container = "grid-container-2";
                             item = "grid-item-2";
+                            
+                            menuButton.classList.remove("change");
+                            content.classList.remove("invisible");
+                            menuPop.remove();
 
                         } else {
 
@@ -496,6 +502,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            background-color: black;
+            color: white;
         }
         
         img {
@@ -515,7 +523,7 @@
         #menu-button {
             display: inline-block;
             cursor: pointer;
-            
+            margin-left: 4px; 
             padding: 0px;
             float: left;
         }
@@ -523,7 +531,7 @@
         .bar1, .bar2, .bar3 {
             width: 35px;
             height: 5px;
-            background-color: #333;
+            background-color: white;
             margin: 6px 0;
             transition: 0.4s;
         }
@@ -573,11 +581,8 @@
         }
         
         .menu-config {
-{#            why this shit does not work??#}
-            padding: 60px 30px;
-            
             height: 800px;
-            font-size: 16px;
+            font-size: 18px;
             line-height: 25px;
         }
         
@@ -602,6 +607,7 @@
             height: 1000px;
             left: 0px;
             top: 60px;
+            font-size: 20px;
         }
         
         #photos {
@@ -611,7 +617,7 @@
         .grid-container-2 {
             display: grid;
             grid-template-columns: auto auto;
-            grid-gap: 2px;
+            grid-gap: 9px;
         }
         
         .grid-item-2 {
@@ -623,7 +629,7 @@
         .grid-container-3 {
             display: grid;
             grid-template-columns: auto auto auto;
-            grid-gap: 5px;
+            grid-gap: 18px;
         }
         
         .grid-item-3 {
