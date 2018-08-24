@@ -18,7 +18,21 @@ class DefaultController extends AbstractController {
      */
     public function homepage() {
         
-        return $this->render('default/homepage.html.twig');
+        $session = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findOneBy(array(
+            // change in a future
+            "name" => 'Cats'
+        ));
+        
+        $photosNames = array();
+            
+        foreach($session->getPhotographs() as $photo) {
+
+            array_push($photosNames, $photo->getPhotoName());
+        }
+        
+        return $this->render('default/homepage.html.twig', array(
+            'photos' => $photosNames
+        ));
     }
     
     /**

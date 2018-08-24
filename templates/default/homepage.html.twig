@@ -21,7 +21,13 @@
         </div>
         <div id="content" class="invisible">
             <div id="photos">
-                <div id="grid-container"></div>
+                <div id="grid-container">
+                    {% for photo in photos %}
+                        <div class="invisible">
+                            <img src="{{ asset(photo, 'photographs') }}">
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
          </div>
          <div style="clear: both;"></div>
@@ -77,10 +83,12 @@
                     content.classList.add("col-9");
                     content.classList.remove("invisible");
                     
-                    showPhotosBySessionName('Cats');
+                    {#showPhotosBySessionName('Cats');
                     setTimeout(function(){
                         switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
-                    }, 300);
+                    }, 300);#}
+                                    
+                    switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
                     
                 } else {
                     
@@ -102,10 +110,12 @@
                     content.classList.add("col-12");
                     content.classList.remove("invisible");
                     
-                    showPhotosBySessionName('Cats');
+                    {#showPhotosBySessionName('Cats');
                     setTimeout(function(){
                         switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
-                    }, 300);
+                    }, 300);#}
+                                    
+                    switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
                 }
             }
             init();
@@ -302,28 +312,39 @@
                 // transform variable with anchor's children NodeList elements to Array
                 let children = Array.from(anchor.childNodes);
 
-                children.forEach(function(item){
+                children.forEach(function(item, index){
+                    
+                    // remove [object Text] elements
+                    // case when items are loaded initially with DOM (weird [object Text] elements are added too) 
+                    if(item.constructor.name !== "Text") {
 
-                    // check if child item has any grid item class
-                    // if not, add passed one
-                    // if has already gridItemClass, remove old one and switch to passed one
-                    if (String(item.className.match(/invisible/g)) === "invisible") {
-
-                        item.classList.add(gridItemClassName);
-
-                    } else if (String(item.className.match(/grid-item-3/g)) === "grid-item-3") {
-
-                        item.classList.remove("grid-item-3");
-                        item.classList.add(gridItemClassName);
-
-                    } else if (String(item.className.match(/grid-item-2/g)) === "grid-item-2") {
-
-                        item.classList.remove("grid-item-2");
-                        item.classList.add(gridItemClassName);
+                        itemIteration(item, gridItemClassName);
                     }
-
-                    item.classList.remove("invisible");
                 });
+            }
+            
+            // auxiliary method for switchOrAddGridClasses()
+            function itemIteration(item, gridItemClassName) {
+            
+                // check if child item has any grid item class
+                // if not, add passed one
+                // if has already gridItemClass, remove old one and switch to passed one
+                if (String(item.className.match(/invisible/g)) === "invisible") {
+
+                    item.classList.add(gridItemClassName);
+
+                } else if (String(item.className.match(/grid-item-3/g)) === "grid-item-3") {
+
+                    item.classList.remove("grid-item-3");
+                    item.classList.add(gridItemClassName);
+
+                } else if (String(item.className.match(/grid-item-2/g)) === "grid-item-2") {
+
+                    item.classList.remove("grid-item-2");
+                    item.classList.add(gridItemClassName);
+                }
+
+                item.classList.remove("invisible");
             }
                                 
             function createAndPasteMenuList(params, anchor) {
@@ -399,6 +420,7 @@
             
             async function getPhotos(sessionName) {
                 
+                // TO CHANGE AFTER DEPLOY
                 let url = "http://localhost:8000/get-photos";
                 
                 const data = {
@@ -420,7 +442,7 @@
             }
             
             function showPhotosBySessionName(sessionName) {
-            
+                
                 if (gridContainer.hasChildNodes()) {
                     
                     while (gridContainer.firstChild) {
@@ -436,24 +458,29 @@
             document.addEventListener('click', function(event) {
 
                 if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
-                    
-                    // TO CHANGE AFTER DEPLOY
-                    let url = "http://localhost:8000/get-photos";
-                    
+                                                 
                     let sessionName = event.target.innerHTML;
+                    showPhotosBySessionName(sessionName);
                     
+                    setTimeout(function(){
+                        
+                        let menuPop = document.getElementById("menu-pop");
+                        let container = "";
+                        let item = "";
+
+                        if (menuPop) {
+
+                            container = "grid-container-2";
+                            item = "grid-item-2";
+
+                        } else {
+
+                            container = "grid-container-3";
+                            item = "grid-item-3";
+                        }
                     
-                    
-                    
-                    // todo: finish changing sessions
-                    
-                    // in a future showPhotosBySessionName()
-                    getPhotos(url, sessionName);
-                    
-                    
-                    
-                    
-                    
+                        switchOrAddGridClasses(gridContainer, container, item);
+                    }, 300);
                 }
             });
         });
@@ -516,17 +543,14 @@
         #logo {
             padding: 0px;
             height: 60px;
-            background-color: green;
             float: left;
         }
         
         #header-spacing {
-            background-color: pink;
             float: left;
         }
         
         #contact-bar {
-            background-color: cornflowerblue;
             text-align: right;
             float: left;
         }
@@ -540,7 +564,6 @@
         }
         
         #content {
-            background-color: yellow;
             height: auto;
             float: left;
         }
@@ -573,7 +596,6 @@
         
         .m-open {
             position: absolute;
-            background-color: purple;
             padding: 60px 30px;
             z-index: 1;
             width: 100%;
