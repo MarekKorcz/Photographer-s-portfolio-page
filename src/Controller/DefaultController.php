@@ -18,10 +18,17 @@ class DefaultController extends AbstractController {
      */
     public function homepage() {
         
-        $session = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findOneBy(array(
-            // change in a future
-            "name" => 'Cats'
-        ));
+        $sessionArray = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findBy(
+            array(
+                'isActive' => true
+            ),
+            array(
+                'id' => 'ASC'
+            ),
+            1
+        );
+        
+        $session = array_shift($sessionArray);
         
         $photosNames = array();
             
@@ -42,7 +49,9 @@ class DefaultController extends AbstractController {
      */
     public function getSessions() {
 
-        $sessions = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findAll();
+        $sessions = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findBy(array(
+            'isActive' => true
+        ));
         
         if ($sessions) {
 
