@@ -44,6 +44,14 @@
     {# page specific scripts #}
     <script src="{{ asset('build/homepage.js') }}"></script>
     
+    
+{#    REMOVE IT LATER!!!!! #}
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
@@ -290,7 +298,7 @@
             });
             
             function switchOrAddGridClasses(anchor, gridContainerClassName, gridItemClassName) {
-                
+                                              
                 // check if anchor has any grid container class
                 // if not, add passed one
                 // if has already gridContainerClass, remove old one and switch to passed one
@@ -311,8 +319,8 @@
 
                 // transform variable with anchor's children NodeList elements to Array
                 let children = Array.from(anchor.childNodes);
-
-                children.forEach(function(item, index){
+                
+                children.forEach(function(item){
                     
                     // remove [object Text] elements
                     // case when items are loaded initially with DOM (weird [object Text] elements are added too) 
@@ -443,15 +451,20 @@
             
             function showPhotosBySessionName(sessionName) {
                 
-                if (gridContainer.hasChildNodes()) {
+                $("#photos").fadeOut("fast", function() {
+                    if (gridContainer.hasChildNodes()) {
                     
-                    while (gridContainer.firstChild) {
-                        
-                        gridContainer.removeChild(gridContainer.firstChild);
-                    }
-                }
+                        while (gridContainer.firstChild) {
 
-                getPhotos(sessionName);
+                            gridContainer.removeChild(gridContainer.firstChild);
+                        }
+                    }
+
+                    document.getElementById("photos").style.display = null;
+                    
+                    getPhotos(sessionName);
+                });
+                
             }
             
             // click on specific menu li element event listener
@@ -462,7 +475,7 @@
                     let sessionName = event.target.innerHTML;
                     showPhotosBySessionName(sessionName);
                     
-                    setTimeout(function(){
+                    setTimeout(function() {
                         
                         let menuPop = document.getElementById("menu-pop");
                         let container = "";
@@ -486,7 +499,7 @@
                         }
                     
                         switchOrAddGridClasses(gridContainer, container, item);
-                    }, 300);
+                    }, 500);
                 }
             });
         });
