@@ -24,7 +24,7 @@
                 <div id="grid-container">
                     {% for photo in photos %}
                         <div class="invisible">
-                            <img src="{{ asset(photo, 'photographs') }}">
+                            <img src="{{ asset(photo, 'photographs') }}">\
                         </div>
                     {% endfor %}
                 </div>
@@ -467,8 +467,13 @@
                 
             }
             
-            // click on specific menu li element event listener
             document.addEventListener('click', function(event) {
+                
+                let menuPop = document.getElementById("menu-pop");
+                let content = document.getElementById("content");
+                let container = document.getElementById("container");
+                let popBackground = document.getElementById("photo-pop-backgorund");
+                let popBox = document.getElementById("photo-box");
 
                 if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
                                                  
@@ -477,14 +482,11 @@
                     
                     setTimeout(function() {
                         
-                        let menuPop = document.getElementById("menu-pop");
                         let container = "";
                         let item = "";
 
                         if (menuPop) {
                             
-                            let content = document.getElementById("content");
-
                             container = "grid-container-2";
                             item = "grid-item-2";
                             
@@ -499,7 +501,35 @@
                         }
                     
                         switchOrAddGridClasses(gridContainer, container, item);
-                    }, 500);
+                    }, 600);
+                }
+                
+                if(event.target.nodeName === "IMG" && !popBox) {
+                    
+                    event.preventDefault();
+                            
+                    let photoPopBackground = document.createElement('div');
+                    photoPopBackground.setAttribute('id', 'photo-pop-backgorund');
+                    
+                    let photoBox = document.createElement('div');
+                    photoBox.setAttribute('id', 'photo-box');
+                    
+                    let img = event.target.outerHTML;
+                    img = img.substr(10, img.length - 12);
+                    
+                    let imgElement = document.createElement('img');
+                    imgElement.setAttribute('src', img);
+                    
+                    photoBox.appendChild(imgElement);
+                    
+                    photoPopBackground.appendChild(photoBox);
+                    
+                    container.appendChild(photoPopBackground);
+                }
+                
+                if (event.target.id === "photo-pop-backgorund") {
+                                       
+                    popBackground.remove();
                 }
             });
         });
@@ -627,6 +657,22 @@
             
         }
         
+        #photo-pop-backgorund {
+            position: absolute;
+            width: 100%;
+{#            it might need changes... #}
+            height: 3000px;
+            top: 0;
+            left: 0;
+        }
+        
+        #photo-box {       
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
         .grid-container-2 {
             display: grid;
             grid-template-columns: auto auto;
@@ -637,6 +683,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.8);
             text-align: center;
+            cursor: pointer;
         }
         
         .grid-container-3 {
@@ -649,6 +696,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.8);
             text-align: center;
+            cursor: pointer;
         }
         
         .invisible {
