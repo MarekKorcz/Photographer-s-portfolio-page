@@ -48,6 +48,14 @@ class DefaultController extends AbstractController {
     }
     
     /**
+     * @Route("/contact", name="contact")
+     */
+    public function contact() {
+        
+        return $this->render('default/contact.html.twig');
+    }
+    
+    /**
      * @Route("/get-sessions", name="get_sessions")
      * 
      * @return JsonResponse

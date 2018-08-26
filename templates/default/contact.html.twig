@@ -12,24 +12,25 @@
                 LOGO
             </div>
             <div id="header-spacing"></div>
-            <div id="contact-bar">
-{#                contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.#}
-            </div>
+            <div id="contact-bar"></div>
             <div style="clear: both;"></div>
         </div>
         <div id="menu" class="invisible">
         </div>
         <div id="content" class="invisible">
-            <div id="photos">
-                <div id="grid-container">
-                    {% if photos is defined %}
-                        {% for photo in photos %}
-                            <div class="invisible">
-                                <img src="{{ asset(photo, 'photographs') }}">
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+            <div id="contact">
+                <h1>Contact page</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas lacinia ante a lacus scelerisque, 
+                    et vulputate lacus lacinia. Ut non libero vehicula, condimentum augue nec, tincidunt urna. Aliquam 
+                    a aliquam justo, et congue arcu. Aenean volutpat nibh at sem porta, sit amet tincidunt dui euismod. 
+                    Etiam non blandit felis. Cras mattis, ante sit amet efficitur mollis, odio risus vestibulum tortor, 
+                    et dapibus nibh orci vitae dui. Nunc eleifend leo sit amet ex mollis semper. Morbi et varius lorem. 
+                    Proin blandit efficitur est, eget finibus dolor convallis ac. Curabitur tortor turpis, placerat 
+                    fringilla nulla sed, porttitor pulvinar ante. Praesent aliquet dolor eu ultrices auctor. Aliquam 
+                    erat volutpat. In lacinia, neque sed rhoncus tempor, ante dolor rutrum lorem, et ultrices neque quam
+                    vitae erat.
+                </p>
             </div>
             <div id="footer">
                 contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
@@ -44,24 +45,14 @@
     <script src="{{ asset('build/vendor.js') }}"></script>
     
     {# common scripts and css #}
-    <script src="{{ asset('build/app.js') }}"></script>
     
     {# page specific scripts #}
-    <script src="{{ asset('build/homepage.js') }}"></script>
-    
-    
-{#    REMOVE IT LATER!!!!! #}
-    <script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous">
-    </script>
+
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            let menuButton = document.getElementById("menu-button");  
-            let gridContainer = document.getElementById("grid-container");
+            let menuButton = document.getElementById("menu-button");
             
             // initial configuration
             function init() {
@@ -73,7 +64,6 @@
                 let contactBar = document.getElementById("contact-bar");
                 let menu = document.getElementById("menu");
                 let content = document.getElementById("content");
-                let gridContainer = document.getElementById("grid-container");
                 let windowWidth = window.innerWidth;
                 
                 if (windowWidth > 740) {
@@ -95,8 +85,6 @@
                     
                     content.classList.add("col-10");
                     content.classList.remove("invisible");
-                                    
-                    switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
                     
                 } else {
                     
@@ -117,8 +105,6 @@
                     
                     content.classList.add("col-12");
                     content.classList.remove("invisible");
-                                    
-                    switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
                 }
             }
             init();
@@ -130,7 +116,6 @@
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
                 let content = document.getElementById("content");
-                let gridContainer = document.getElementById("grid-container");
                 let windowWidth = window.innerWidth;
                 let menu = document.getElementById("menu");
                 let menuButton = document.getElementById("menu-button");
@@ -209,11 +194,6 @@
                         content.classList.add("col-10");
                     }
                     
-                    if (String(gridContainer.className.match(/grid-container-2/g)) === "grid-container-2") {
-                        
-                        switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
-                    }
-                    
                 } else {
                     
                     //header
@@ -253,15 +233,10 @@
                         content.classList.remove("col-10");
                         content.classList.add("col-12");
                     }
-                    
-                    if (String(gridContainer.className.match(/grid-container-3/g)) === "grid-container-3") {
-                        
-                        switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
-                    }
                 }
             };
             window.addEventListener("resize", onresize);
-            
+                        
             // click menu button event listener
             menuButton.addEventListener("click", function(){
 
@@ -290,66 +265,8 @@
                     menuPop.remove();
                 }
             });
-            
-            function switchOrAddGridClasses(anchor, gridContainerClassName, gridItemClassName) {
-                                              
-                // check if anchor has any grid container class
-                // if not, add passed one
-                // if has already gridContainerClass, remove old one and switch to passed one
-                if (anchor.classList.length === 0) {
-
-                    anchor.classList.add(gridContainerClassName);
-
-                } else if (String(anchor.className.match(/grid-container-3/g)) === "grid-container-3") {
-
-                    anchor.classList.remove("grid-container-3");
-                    anchor.classList.add(gridContainerClassName);
-
-                } else if (String(anchor.className.match(/grid-container-2/g)) === "grid-container-2") {
-
-                    anchor.classList.remove("grid-container-2");
-                    anchor.classList.add(gridContainerClassName);
-                }
-
-                // transform variable with anchor's children NodeList elements to Array
-                let children = Array.from(anchor.childNodes);
-                
-                children.forEach(function(item){
-                    
-                    // remove [object Text] elements
-                    // case when items are loaded initially with DOM (weird [object Text] elements are added too) 
-                    if(item.constructor.name !== "Text") {
-
-                        itemIteration(item, gridItemClassName);
-                    }
-                });
-            }
-            
-            // auxiliary method for switchOrAddGridClasses()
-            function itemIteration(item, gridItemClassName) {
-            
-                // check if child item has any grid item class
-                // if not, add passed one
-                // if has already gridItemClass, remove old one and switch to passed one
-                if (String(item.className.match(/invisible/g)) === "invisible") {
-
-                    item.classList.add(gridItemClassName);
-
-                } else if (String(item.className.match(/grid-item-3/g)) === "grid-item-3") {
-
-                    item.classList.remove("grid-item-3");
-                    item.classList.add(gridItemClassName);
-
-                } else if (String(item.className.match(/grid-item-2/g)) === "grid-item-2") {
-
-                    item.classList.remove("grid-item-2");
-                    item.classList.add(gridItemClassName);
-                }
-
-                item.classList.remove("invisible");
-            }
-                                
-            function createAndPasteMenuList(params, anchor) {
+                                            
+            function createAndPasteMenuList(anchor) {
                 
                 let menuList = document.createElement('div');
                 menuList.setAttribute('id', 'menu-list');
@@ -358,19 +275,6 @@
                 sessionHeader.innerHTML = "Sessions";
                 
                 menuList.appendChild(sessionHeader);
-                
-                let sessionUnorderedList = document.createElement('ul');
-                sessionUnorderedList.setAttribute('id', 'sessions');
-                
-                for (var i = 0; i < params.length; i++) {
-                    
-                    let sessionListElement = document.createElement('li');
-                    sessionListElement.innerHTML = params[i];
-                    
-                    sessionUnorderedList.appendChild(sessionListElement);
-                }
-                
-                menuList.appendChild(sessionUnorderedList);
                 
                 let about = document.createElement('p');
                 // add link to redirect
@@ -389,149 +293,10 @@
                 anchor.append(menuList);
             }
             
-            async function getMenuList(url, anchor) {
-                const response = await fetch(url);
-                const json = await response.json();
-                const listOfSessions = json.map(session => session.name);
-
-                createAndPasteMenuList(listOfSessions, anchor);
-            }
-            
             function pasteMenuContent(anchor) {
-                
-                // TO CHANGE AFTER DEPLOY
-                let url = "http://localhost:8000/get-sessions";
             
-                getMenuList(url, anchor);
+                createAndPasteMenuList(anchor);
             }
-                    
-            function createAndPasteSessionPhotos(params) {
-                
-                for (var i = 0; i < params.length; i++) {
-                    
-                    let gridItemElement = document.createElement('div');
-                    gridItemElement.classList.add("invisible");
-                    
-                    let imageElement = document.createElement('img');
-                    imageElement.src = '/uploads/photographs/' + params[i];
-                    
-                    gridItemElement.appendChild(imageElement);
-                    gridContainer.appendChild(gridItemElement);
-                }
-            }              
-            
-            async function getPhotos(sessionName) {
-                
-                // TO CHANGE AFTER DEPLOY
-                let url = "http://localhost:8000/get-photos";
-                
-                const data = {
-                    sessionName: sessionName
-                };
-
-                const options = {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                };
-
-                const response = await fetch(url, options);
-                const photosNames = await response.json();
-                
-                createAndPasteSessionPhotos(photosNames);
-            }
-            
-            function showPhotosBySessionName(sessionName) {
-                
-                $("#photos").fadeOut("fast", function() {
-                    if (gridContainer.hasChildNodes()) {
-                    
-                        while (gridContainer.firstChild) {
-
-                            gridContainer.removeChild(gridContainer.firstChild);
-                        }
-                    }
-
-                    document.getElementById("photos").style.display = null;
-                    
-                    getPhotos(sessionName);
-                });
-                
-            }
-            
-            document.addEventListener('click', function(event) {
-                
-                let menuPop = document.getElementById("menu-pop");
-                let content = document.getElementById("content");
-                let container = document.getElementById("container");
-                let popBackground = document.getElementById("photo-pop-backgorund");
-                let popBox = document.getElementById("photo-box");
-                let footer = document.getElementById("footer");
-
-                if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
-                    
-                    footer.classList.add("invisible");
-                                                 
-                    let sessionName = event.target.innerHTML;
-                    showPhotosBySessionName(sessionName);
-                    
-                    setTimeout(function() {
-                        
-                        let container = "";
-                        let item = "";
-
-                        if (menuPop) {
-                            
-                            container = "grid-container-2";
-                            item = "grid-item-2";
-                            
-                            menuButton.classList.remove("change");
-                            content.classList.remove("invisible");
-                            menuPop.remove();
-
-                        } else {
-
-                            container = "grid-container-3";
-                            item = "grid-item-3";
-                        }
-                    
-                        switchOrAddGridClasses(gridContainer, container, item);
-                        footer.classList.remove("invisible");
-                    }, 600);
-                }
-                
-                if(event.target.nodeName === "IMG" && !popBox) {
-                    
-                    event.preventDefault();
-                            
-                    let photoPopBackground = document.createElement('div');
-                    photoPopBackground.setAttribute('id', 'photo-pop-backgorund');
-                    
-                    let photoBox = document.createElement('div');
-                    photoBox.setAttribute('id', 'photo-box');
-                    
-                    let img = event.target.outerHTML;
-                    img = img.substr(10, img.length - 12);
-                    
-                    let imgElement = document.createElement('img');
-                    imgElement.setAttribute('src', img);
-                    
-                    photoBox.appendChild(imgElement);
-                    
-                    photoPopBackground.appendChild(photoBox);
-                    
-                    container.appendChild(photoPopBackground);
-                    document.body.classList.add("noscroll");
-                }
-                
-                if (event.target.id === "photo-pop-backgorund") {
-                                       
-                    popBackground.remove();
-                    document.body.classList.remove("noscroll");
-                }
-            });
         });
     </script>
 {% endblock %}
@@ -547,20 +312,6 @@
             box-sizing: border-box;
             background-color: #060f1c;
             color: white;
-        }
-        
-        img {
-            width: 100%;
-            height: 100%;
-        }
-        
-        #container {
-
-        
-        }
-        
-        #heading {
-            
         }
         
         #menu-button {
@@ -618,6 +369,10 @@
             height: auto;
             float: left;
         }
+        
+        #contact {
+            padding: 0 20px 40px 20px;
+        }
     
         #menu {
             float: left;
@@ -631,10 +386,6 @@
         
         #menu-list > p {
             font-weight: bold;
-        }
-        
-        ul#sessions > li {
-            cursor: pointer;
         }
         
         #sessions {
@@ -651,57 +402,6 @@
             left: 0px;
             top: 60px;
             font-size: 20px;
-        }
-        
-        #photos {
-            
-        }
-        
-        #photo-pop-backgorund {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-        
-        #photo-box {       
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        body.noscroll {
-            position: fixed;
-            overflow-y: scroll;
-            width: 100%;
-        }
-        
-        .grid-container-2 {
-            display: grid;
-            grid-template-columns: auto auto;
-            grid-gap: 9px;
-        }
-        
-        .grid-item-2 {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .grid-container-3 {
-            display: grid;
-            grid-template-columns: auto auto auto;
-            grid-gap: 18px;
-        }
-        
-        .grid-item-3 {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            text-align: center;
-            cursor: pointer;
         }
         
         .invisible {
