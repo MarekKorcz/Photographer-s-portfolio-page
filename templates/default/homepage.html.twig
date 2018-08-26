@@ -24,7 +24,7 @@
                 <div id="grid-container">
                     {% for photo in photos %}
                         <div class="invisible">
-                            <img src="{{ asset(photo, 'photographs') }}">\
+                            <img src="{{ asset(photo, 'photographs') }}">
                         </div>
                     {% endfor %}
                 </div>
@@ -525,11 +525,13 @@
                     photoPopBackground.appendChild(photoBox);
                     
                     container.appendChild(photoPopBackground);
+                    document.body.classList.add("noscroll");
                 }
                 
                 if (event.target.id === "photo-pop-backgorund") {
                                        
                     popBackground.remove();
+                    document.body.classList.remove("noscroll");
                 }
             });
         });
@@ -660,8 +662,7 @@
         #photo-pop-backgorund {
             position: absolute;
             width: 100%;
-{#            it might need changes... #}
-            height: 3000px;
+            height: 100%;
             top: 0;
             left: 0;
         }
@@ -671,6 +672,12 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
+        }
+        
+        body.noscroll {
+            position: fixed;
+            overflow-y: scroll;
+            width: 100%;
         }
         
         .grid-container-2 {
