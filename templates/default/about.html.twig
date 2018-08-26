@@ -272,20 +272,30 @@
                 menuList.setAttribute('id', 'menu-list');
                     
                 let sessionHeader = document.createElement('p');
-                sessionHeader.innerHTML = "Sessions";
                 
+                let aTagSessions = document.createElement('a');
+                aTagSessions.setAttribute('href', '/');
+                aTagSessions.innerHTML = "Sessions";
+                
+                sessionHeader.appendChild(aTagSessions);
                 menuList.appendChild(sessionHeader);
                 
                 let about = document.createElement('p');
-                // add link to redirect
-                about.innerHTML = "About";
                 
+                let aTagAbout = document.createElement('a');
+                aTagAbout.setAttribute('href', '/about');
+                aTagAbout.innerHTML = "About";
+                
+                about.appendChild(aTagAbout);
                 menuList.appendChild(about);
                 
                 let contact = document.createElement('p');
-                // add link to redirect
-                contact.innerHTML = "Contact";
                 
+                let aTagContact = document.createElement('a');
+                aTagContact.setAttribute('href', '/contact');
+                aTagContact.innerHTML = "Contact";
+                
+                contact.appendChild(aTagContact);
                 menuList.appendChild(contact);
                 
                 // add social medias
@@ -386,6 +396,10 @@
         
         #menu-list > p {
             font-weight: bold;
+        }
+        
+        p > a {
+            text-decoration: none;
         }
         
         #sessions {
