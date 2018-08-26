@@ -31,15 +31,20 @@ class DefaultController extends AbstractController {
         $session = array_shift($sessionArray);
         
         $photosNames = array();
+        
+        if ($session) {
             
-        foreach($session->getPhotographs() as $photo) {
+            foreach($session->getPhotographs() as $photo) {
 
-            array_push($photosNames, $photo->getPhotoName());
+                array_push($photosNames, $photo->getPhotoName());
+            }
+
+            return $this->render('default/homepage.html.twig', array(
+                'photos' => $photosNames
+            ));
         }
         
-        return $this->render('default/homepage.html.twig', array(
-            'photos' => $photosNames
-        ));
+        return $this->render('default/homepage.html.twig');
     }
     
     /**
@@ -90,12 +95,12 @@ class DefaultController extends AbstractController {
         
         $requestData = json_decode($request->getContent());
 
-        $session = $requestData->sessionName;
+        $sessionName = $requestData->sessionName;
         
-        if ($session) {
+        if ($sessionName) {
             
             $session = $this->getDoctrine()->getManager()->getRepository('App\Entity\Session')->findOneBy(array(
-                "name" => $session
+                "name" => $sessionName
             ));
             
             $photosNames = array();

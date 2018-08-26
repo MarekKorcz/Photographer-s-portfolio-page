@@ -13,7 +13,7 @@
             </div>
             <div id="header-spacing"></div>
             <div id="contact-bar">
-                contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
+{#                contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.#}
             </div>
             <div style="clear: both;"></div>
         </div>
@@ -22,15 +22,20 @@
         <div id="content" class="invisible">
             <div id="photos">
                 <div id="grid-container">
-                    {% for photo in photos %}
-                        <div class="invisible">
-                            <img src="{{ asset(photo, 'photographs') }}">
-                        </div>
-                    {% endfor %}
+                    {% if photos is defined %}
+                        {% for photo in photos %}
+                            <div class="invisible">
+                                <img src="{{ asset(photo, 'photographs') }}">
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-         </div>
-         <div style="clear: both;"></div>
+            <div id="footer">
+                contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
+            </div>
+        </div>
+        <div style="clear: both;"></div>
      </div>
 {% endblock %}
 
@@ -90,11 +95,6 @@
                     
                     content.classList.add("col-10");
                     content.classList.remove("invisible");
-                    
-                    {#showPhotosBySessionName('Cats');
-                    setTimeout(function(){
-                        switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
-                    }, 300);#}
                                     
                     switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
                     
@@ -117,11 +117,6 @@
                     
                     content.classList.add("col-12");
                     content.classList.remove("invisible");
-                    
-                    {#showPhotosBySessionName('Cats');
-                    setTimeout(function(){
-                        switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
-                    }, 300);#}
                                     
                     switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
                 }
@@ -474,8 +469,11 @@
                 let container = document.getElementById("container");
                 let popBackground = document.getElementById("photo-pop-backgorund");
                 let popBox = document.getElementById("photo-box");
+                let footer = document.getElementById("footer");
 
                 if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
+                    
+                    footer.classList.add("invisible");
                                                  
                     let sessionName = event.target.innerHTML;
                     showPhotosBySessionName(sessionName);
@@ -501,6 +499,7 @@
                         }
                     
                         switchOrAddGridClasses(gridContainer, container, item);
+                        footer.classList.remove("invisible");
                     }, 600);
                 }
                 
@@ -709,6 +708,10 @@
         .invisible {
             visibility: hidden;
             height: 0px;
+        }
+        
+        #footer {
+            text-align: right;
         }
         
         .col-0 {
