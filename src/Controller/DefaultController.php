@@ -56,6 +56,14 @@ class DefaultController extends AbstractController {
     }
     
     /**
+     * @Route("/about", name="about")
+     */
+    public function about() {
+        
+        return $this->render('default/about.html.twig');
+    }
+    
+    /**
      * @Route("/get-sessions", name="get_sessions")
      * 
      * @return JsonResponse
