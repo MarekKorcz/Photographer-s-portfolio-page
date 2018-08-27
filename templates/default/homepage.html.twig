@@ -394,7 +394,38 @@
                 contact.appendChild(aTagContact);
                 menuList.appendChild(contact);
                 
-                // add social medias
+                let socialsUl = document.createElement('ul');
+                socialsUl.setAttribute('id', 'socials');
+                
+                let facebookLiTag = document.createElement('li');
+                // add href to fb page
+                let facebookATag = document.createElement('a');
+                let facebookITag = document.createElement('i');
+                
+                facebookITag.setAttribute('id', 'facebook');
+                facebookITag.classList.add("fa");
+                facebookITag.classList.add("fa-facebook");
+                
+                facebookATag.appendChild(facebookITag);
+                facebookLiTag.appendChild(facebookATag);
+                
+                socialsUl.appendChild(facebookLiTag);
+                
+                let instagramLiTag = document.createElement('li');
+                // add href to instagram page
+                let instagramATag = document.createElement('a');
+                let instagramITag = document.createElement('i');
+                
+                instagramITag.setAttribute('id', 'instagram');
+                instagramITag.classList.add("fa");
+                instagramITag.classList.add("fa-instagram");
+                
+                instagramATag.appendChild(instagramITag);
+                instagramLiTag.appendChild(instagramATag);
+                
+                socialsUl.appendChild(instagramLiTag);
+                
+                menuList.appendChild(socialsUl);
                 
                 anchor.append(menuList);
             }
@@ -509,7 +540,7 @@
                     
                         switchOrAddGridClasses(gridContainer, container, item);
                         footer.classList.remove("invisible");
-                    }, 600);
+                    }, 700);
                 }
                 
                 if(event.target.nodeName === "IMG" && !popBox) {
@@ -645,6 +676,35 @@
         
         ul#sessions > li {
             cursor: pointer;
+        } 
+        
+        ul#socials {
+            display: flex;
+        }
+        
+        ul#socials > li {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+        }
+        
+        ul#socials > li > a {
+            display: block;
+            width: 30px;
+            height: 30px;
+            background: #060f1c;
+            text-align: center;
+            line-height: 80px;
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        
+        i#facebook:hover {
+            color: #3b5998
+        }
+        
+        i#instagram:hover {
+            color: #e95950
         }
         
         p > a {
