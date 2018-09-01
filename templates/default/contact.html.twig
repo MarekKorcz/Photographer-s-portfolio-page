@@ -236,6 +236,15 @@
                 }
             };
             window.addEventListener("resize", onresize);
+            
+            // right mouse click
+            document.addEventListener('contextmenu', function(event) {
+                
+                // block right button mouse click
+                
+                // enable it before deploy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //        event.preventDefault();
+            });
                         
             // click menu button event listener
             menuButton.addEventListener("click", function(){

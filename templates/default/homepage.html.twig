@@ -502,6 +502,15 @@
                 
             }
             
+            // right mouse click
+            document.addEventListener('contextmenu', function(event) {
+                
+                // block right button mouse click
+                
+                // enable it before deploy !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //        event.preventDefault();
+            });
+            
             document.addEventListener('click', function(event) {
                 
                 let menuPop = document.getElementById("menu-pop");
