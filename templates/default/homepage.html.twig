@@ -20,22 +20,18 @@
         <div id="menu" class="invisible">
         </div>
         <div id="content" class="invisible">
-            <div id="photos">
-                <div id="grid-container">
-                    {% if photos is defined %}
-                        {% for photo in photos %}
-                            <div class="invisible">
-                                <img src="{{ asset(photo, 'photographs') }}">
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
-            <div id="footer">
-                contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
+            <div id="grid-container">
+                {% if photos is defined %}
+                    {% for photo in photos %}
+                        <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible">
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
         <div style="clear: both;"></div>
+        <div id="footer" class="invisible">
+            contact: 111-222-333  &#9400; 2018 Marcin Krawczyk. All Rights Reserved.
+        </div>
      </div>
 {% endblock %}
 
@@ -62,6 +58,7 @@
             
             let menuButton = document.getElementById("menu-button");  
             let gridContainer = document.getElementById("grid-container");
+            let footer = document.getElementById("footer");
             
             // initial configuration
             function init() {
@@ -73,7 +70,6 @@
                 let contactBar = document.getElementById("contact-bar");
                 let menu = document.getElementById("menu");
                 let content = document.getElementById("content");
-                let gridContainer = document.getElementById("grid-container");
                 let windowWidth = window.innerWidth;
                 
                 if (windowWidth > 740) {
@@ -95,8 +91,10 @@
                     
                     content.classList.add("col-10");
                     content.classList.remove("invisible");
-                                    
-                    switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
+                    
+                    footer.classList.remove("invisible");
+                    
+                    putImagesToDivColumn(2);
                     
                 } else {
                     
@@ -117,8 +115,10 @@
                     
                     content.classList.add("col-12");
                     content.classList.remove("invisible");
-                                    
-                    switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
+                    
+                    footer.classList.remove("invisible");
+                    
+                    putImagesToDivColumn(1);
                 }
             }
             init();
@@ -130,7 +130,6 @@
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
                 let content = document.getElementById("content");
-                let gridContainer = document.getElementById("grid-container");
                 let windowWidth = window.innerWidth;
                 let menu = document.getElementById("menu");
                 let menuButton = document.getElementById("menu-button");
@@ -209,11 +208,6 @@
                         content.classList.add("col-10");
                     }
                     
-                    if (String(gridContainer.className.match(/grid-container-2/g)) === "grid-container-2") {
-                        
-                        switchOrAddGridClasses(gridContainer, "grid-container-3", "grid-item-3");
-                    }
-                    
                 } else {
                     
                     //header
@@ -253,11 +247,6 @@
                         content.classList.remove("col-10");
                         content.classList.add("col-12");
                     }
-                    
-                    if (String(gridContainer.className.match(/grid-container-3/g)) === "grid-container-3") {
-                        
-                        switchOrAddGridClasses(gridContainer, "grid-container-2", "grid-item-2");
-                    }
                 }
             };
             window.addEventListener("resize", onresize);
@@ -291,62 +280,88 @@
                 }
             });
             
-            function switchOrAddGridClasses(anchor, gridContainerClassName, gridItemClassName) {
-                                              
-                // check if anchor has any grid container class
-                // if not, add passed one
-                // if has already gridContainerClass, remove old one and switch to passed one
-                if (anchor.classList.length === 0) {
-
-                    anchor.classList.add(gridContainerClassName);
-
-                } else if (String(anchor.className.match(/grid-container-3/g)) === "grid-container-3") {
-
-                    anchor.classList.remove("grid-container-3");
-                    anchor.classList.add(gridContainerClassName);
-
-                } else if (String(anchor.className.match(/grid-container-2/g)) === "grid-container-2") {
-
-                    anchor.classList.remove("grid-container-2");
-                    anchor.classList.add(gridContainerClassName);
-                }
-
-                // transform variable with anchor's children NodeList elements to Array
-                let children = Array.from(anchor.childNodes);
+            function createFirstDivColumn() {
                 
+                let firstColumn = document.createElement('div');
+                firstColumn.setAttribute('id', 'first-column');
+                firstColumn.classList.add("invisible");
+                firstColumn.classList.add("grid-box");
+                
+                return firstColumn;
+            }
+            
+            function createSecondDivColumn() {
+                
+                let secondColumn = document.createElement('div');
+                secondColumn.setAttribute('id', 'second-column');
+                secondColumn.classList.add("invisible");
+                secondColumn.classList.add("grid-box");
+                
+                return secondColumn;
+            }
+            
+            function iterateAndGetImagesFromGridContainer() {
+                
+                let children = Array.from(gridContainer.childNodes);
+                let images = [];
+
                 children.forEach(function(item){
-                    
+
                     // remove [object Text] elements
                     // case when items are loaded initially with DOM (weird [object Text] elements are added too) 
                     if(item.constructor.name !== "Text") {
 
-                        itemIteration(item, gridItemClassName);
+                        item.classList.remove("invisible");
+                        images.push(item);
                     }
                 });
+                
+                return images;
             }
             
-            // auxiliary method for switchOrAddGridClasses()
-            function itemIteration(item, gridItemClassName) {
-            
-                // check if child item has any grid item class
-                // if not, add passed one
-                // if has already gridItemClass, remove old one and switch to passed one
-                if (String(item.className.match(/invisible/g)) === "invisible") {
+            function putImagesToDivColumn(amount) {
+                
+                if (amount === 1) {
+                    
+                    let firstColumn = createFirstDivColumn();
+                    
+                    let images = iterateAndGetImagesFromGridContainer();
+                    
+                    images.forEach(function(item) {
 
-                    item.classList.add(gridItemClassName);
+                        firstColumn.appendChild(item);
+                    });
+                    
+                    firstColumn.style.width = "100%";
+                    firstColumn.classList.remove("invisible");
+                    
+                    gridContainer.appendChild(firstColumn);
+                    
+                } else if (amount === 2) {
+                    
+                    let firstColumn = createFirstDivColumn();
+                    let secondColumn = createSecondDivColumn();
+                    
+                    let images = iterateAndGetImagesFromGridContainer();
+                    
+                    images.forEach(function(item, iterator) {
+                    
+                        if (iterator % 2 === 0) {
 
-                } else if (String(item.className.match(/grid-item-3/g)) === "grid-item-3") {
+                            firstColumn.appendChild(item);
 
-                    item.classList.remove("grid-item-3");
-                    item.classList.add(gridItemClassName);
+                        } else {
 
-                } else if (String(item.className.match(/grid-item-2/g)) === "grid-item-2") {
-
-                    item.classList.remove("grid-item-2");
-                    item.classList.add(gridItemClassName);
+                            secondColumn.appendChild(item);
+                        }
+                    });
+                    
+                    firstColumn.classList.remove("invisible");
+                    secondColumn.classList.remove("invisible");
+                    
+                    gridContainer.appendChild(firstColumn);
+                    gridContainer.appendChild(secondColumn);
                 }
-
-                item.classList.remove("invisible");
             }
                                 
             function createAndPasteMenuList(params, anchor) {
@@ -518,7 +533,6 @@
                 let container = document.getElementById("container");
                 let popBackground = document.getElementById("photo-pop-backgorund");
                 let popBox = document.getElementById("photo-box");
-                let footer = document.getElementById("footer");
 
                 if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
                     
@@ -591,6 +605,7 @@
     <link rel="stylesheet" href="{{ asset('build/homepage_style.css') }}"/>
     
     <style>
+        
         * {
             margin: 0;
             padding: 0;
@@ -599,14 +614,20 @@
             color: white;
         }
         
-        img {
-            width: 100%;
-            height: 100%;
-        }
-        
         #container {
 
         
+        }
+        
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .grid-box {
+            width: 50%;
+            float: left;
+            padding: 2px;
         }
         
         #heading {
@@ -759,32 +780,6 @@
             position: fixed;
             overflow-y: scroll;
             width: 100%;
-        }
-        
-        .grid-container-2 {
-            display: grid;
-            grid-template-columns: auto auto;
-            grid-gap: 9px;
-        }
-        
-        .grid-item-2 {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .grid-container-3 {
-            display: grid;
-            grid-template-columns: auto auto auto;
-            grid-gap: 18px;
-        }
-        
-        .grid-item-3 {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            text-align: center;
-            cursor: pointer;
         }
         
         .invisible {
