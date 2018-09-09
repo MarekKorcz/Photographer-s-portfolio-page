@@ -94,7 +94,7 @@
                     
                     footer.classList.remove("invisible");
                     
-                    putImagesToDivColumn(2);
+                    putPhotosToDivColumn(2);
                     
                 } else {
                     
@@ -118,7 +118,7 @@
                     
                     footer.classList.remove("invisible");
                     
-                    putImagesToDivColumn(1);
+                    putPhotosToDivColumn(1);
                 }
             }
             init();
@@ -310,10 +310,10 @@
                 return secondColumn;
             }
             
-            function iterateAndGetImagesFromGridContainer() {
+            function iterateAndGetPhotosFromGridContainer() {
                 
                 let children = Array.from(gridContainer.childNodes);
-                let images = [];
+                let photos = [];
 
                 children.forEach(function(item){
 
@@ -322,22 +322,22 @@
                     if(item.constructor.name !== "Text") {
 
                         item.classList.remove("invisible");
-                        images.push(item);
+                        photos.push(item);
                     }
                 });
                 
-                return images;
+                return photos;
             }
             
-            function putImagesToDivColumn(amount) {
+            function putPhotosToDivColumn(amount) {
                 
                 if (amount === 1) {
                     
                     let firstColumn = createFirstDivColumn();
                     
-                    let images = iterateAndGetImagesFromGridContainer();
+                    let photos = iterateAndGetPhotosFromGridContainer();
                     
-                    images.forEach(function(item) {
+                    photos.forEach(function(item) {
 
                         firstColumn.appendChild(item);
                     });
@@ -352,9 +352,9 @@
                     let firstColumn = createFirstDivColumn();
                     let secondColumn = createSecondDivColumn();
                     
-                    let images = iterateAndGetImagesFromGridContainer();
+                    let photos = iterateAndGetPhotosFromGridContainer();
                     
-                    images.forEach(function(item, iterator) {
+                    photos.forEach(function(item, iterator) {
                     
                         if (iterator % 2 === 0) {
 
@@ -373,7 +373,6 @@
                     secondColumn.classList.remove("invisible");
                 }
             }
-            
             
             function countPhotosInDivColumn(column) {
                   
