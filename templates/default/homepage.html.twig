@@ -208,6 +208,11 @@
                         content.classList.add("col-10");
                     }
                     
+                    if (document.getElementsByClassName("grid-box").length !== 2) {
+                    
+                        redistributePhotosToTwoDivColumns();
+                    }
+                    
                 } else {
                     
                     //header
@@ -246,6 +251,11 @@
 
                         content.classList.remove("col-10");
                         content.classList.add("col-12");
+                    }
+                    
+                    if (document.getElementsByClassName("grid-box").length !== 1) {
+                    
+                        redistributePhotosToOneDivColumn();
                     }
                 }
             };
@@ -356,14 +366,124 @@
                         }
                     });
                     
-                    firstColumn.classList.remove("invisible");
-                    secondColumn.classList.remove("invisible");
-                    
                     gridContainer.appendChild(firstColumn);
                     gridContainer.appendChild(secondColumn);
+                    
+                    firstColumn.classList.remove("invisible");
+                    secondColumn.classList.remove("invisible");
                 }
             }
+            
+            
+            function countPhotosInDivColumn(column) {
+                  
+                let children = Array.from(column.childNodes);
+                let counter = 0;
+                
+                children.forEach(function(item){
+
+                    if(item.constructor.name !== "Text") {
+
+                        counter ++;
+                    }
+                });
+                
+                return counter;
+            }
+            
+            function getPhotosFromDivColumn(column) {
+                  
+                let children = Array.from(column.childNodes);
+                let photos = [];
+                
+                children.forEach(function(item){
+
+                    if(item.constructor.name !== "Text") {
+
+                        photos.push(item);
+                    }
+                });
+                
+                return photos;
+            }   
+            
+            function redistributePhotosToOneDivColumn() {
+                
+                let firstColumn = document.getElementById("first-column");
+                let secondColumn = document.getElementById("second-column");
+                
+                let firstColumnCount = countPhotosInDivColumn(firstColumn);
+                let secondColumnCount = countPhotosInDivColumn(secondColumn);
                                 
+                let firstColumnPhotos = getPhotosFromDivColumn(firstColumn);
+                let secondColumnPhotos = getPhotosFromDivColumn(secondColumn);
+                
+                let iterationNumber = Math.max(
+                    firstColumnCount, 
+                    secondColumnCount
+                );
+                
+                let photos = [];
+                
+                for (var i = 0; i < iterationNumber; i++) {
+                
+                    if (i < firstColumnCount) {
+                        
+                        photos.push(firstColumnPhotos[i]);
+                    }
+                    
+                    if (i < secondColumnCount) {
+                        
+                        photos.push(secondColumnPhotos[i]);
+                    }
+                }
+                
+                firstColumn.remove();
+                secondColumn.remove();
+                
+                let newFirstColumn = createFirstDivColumn();
+                
+                photos.forEach(function(item) {
+
+                    newFirstColumn.appendChild(item);
+                });
+                
+                gridContainer.appendChild(newFirstColumn);
+                newFirstColumn.style.width = "100%";
+                newFirstColumn.classList.remove("invisible");
+            }
+            
+            function redistributePhotosToTwoDivColumns() {
+                
+                let firstColumn = document.getElementById("first-column");
+                
+                let photos = getPhotosFromDivColumn(firstColumn);
+                
+                let newFirstColumn = createFirstDivColumn();
+                let secondColumn = createSecondDivColumn();
+                
+                for (var i = 0; i < photos.length; i++) {
+                
+                    if (i % 2 === 0) {
+                        
+                        newFirstColumn.appendChild(photos[i]);
+                    }
+                    
+                    if (i % 2 !== 0) {
+                        
+                        secondColumn.appendChild(photos[i]);
+                    }
+                }
+                
+                firstColumn.remove();
+                
+                gridContainer.appendChild(newFirstColumn);
+                gridContainer.appendChild(secondColumn);
+                
+                newFirstColumn.classList.remove("invisible");
+                secondColumn.classList.remove("invisible");
+            }
+    
             function createAndPasteMenuList(params, anchor) {
                 
                 let menuList = document.createElement('div');
