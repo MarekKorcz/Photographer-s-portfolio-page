@@ -20,9 +20,9 @@
         <div id="menu" class="invisible">
         </div>
         <div id="content" class="invisible">
-            <div id="grid-container">
-                {% if photos is defined %}
-                    {% for photo in photos %}
+            <div id="photos">
+                {% if sessionPhotos is defined %}
+                    {% for photo in sessionPhotos %}
                         <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible">
                     {% endfor %}
                 {% endif %}
@@ -57,7 +57,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             
             let menuButton = document.getElementById("menu-button");  
-            let gridContainer = document.getElementById("grid-container");
+            let photos = document.getElementById("photos");
             let footer = document.getElementById("footer");
             
             // initial configuration
@@ -310,10 +310,10 @@
                 return secondColumn;
             }
             
-            function iterateAndGetPhotosFromGridContainer() {
+            function iterateAndGetPhotosFromContentDiv() {
                 
-                let children = Array.from(gridContainer.childNodes);
-                let photos = [];
+                let children = Array.from(photos.childNodes);
+                let photosArray = [];
 
                 children.forEach(function(item){
 
@@ -322,11 +322,11 @@
                     if(item.constructor.name !== "Text") {
 
                         item.classList.remove("invisible");
-                        photos.push(item);
+                        photosArray.push(item);
                     }
                 });
                 
-                return photos;
+                return photosArray;
             }
             
             function putPhotosToDivColumn(amount) {
@@ -335,9 +335,9 @@
                     
                     let firstColumn = createFirstDivColumn();
                     
-                    let photos = iterateAndGetPhotosFromGridContainer();
+                    let photosArray = iterateAndGetPhotosFromContentDiv();
                     
-                    photos.forEach(function(item) {
+                    photosArray.forEach(function(item) {
 
                         firstColumn.appendChild(item);
                     });
@@ -345,16 +345,16 @@
                     firstColumn.style.width = "100%";
                     firstColumn.classList.remove("invisible");
                     
-                    gridContainer.appendChild(firstColumn);
+                    photos.appendChild(firstColumn);
                     
                 } else if (amount === 2) {
                     
                     let firstColumn = createFirstDivColumn();
                     let secondColumn = createSecondDivColumn();
                     
-                    let photos = iterateAndGetPhotosFromGridContainer();
+                    let photosArray = iterateAndGetPhotosFromContentDiv();
                     
-                    photos.forEach(function(item, iterator) {
+                    photosArray.forEach(function(item, iterator) {
                     
                         if (iterator % 2 === 0) {
 
@@ -366,8 +366,8 @@
                         }
                     });
                     
-                    gridContainer.appendChild(firstColumn);
-                    gridContainer.appendChild(secondColumn);
+                    photos.appendChild(firstColumn);
+                    photos.appendChild(secondColumn);
                     
                     firstColumn.classList.remove("invisible");
                     secondColumn.classList.remove("invisible");
@@ -393,24 +393,24 @@
             function getPhotosFromDivColumn(column) {
                   
                 let children = Array.from(column.childNodes);
-                let photos = [];
+                let photosArray = [];
                 
                 children.forEach(function(item){
 
                     if(item.constructor.name !== "Text") {
 
-                        photos.push(item);
+                        photosArray.push(item);
                     }
                 });
                 
-                return photos;
+                return photosArray;
             }   
             
             function redistributePhotosToOneDivColumn() {
                 
                 let firstColumn = document.getElementById("first-column");
                 let secondColumn = document.getElementById("second-column");
-                
+                                
                 let firstColumnCount = countPhotosInDivColumn(firstColumn);
                 let secondColumnCount = countPhotosInDivColumn(secondColumn);
                                 
@@ -422,18 +422,18 @@
                     secondColumnCount
                 );
                 
-                let photos = [];
+                let photosArray = [];
                 
                 for (var i = 0; i < iterationNumber; i++) {
                 
                     if (i < firstColumnCount) {
                         
-                        photos.push(firstColumnPhotos[i]);
+                        photosArray.push(firstColumnPhotos[i]);
                     }
                     
                     if (i < secondColumnCount) {
                         
-                        photos.push(secondColumnPhotos[i]);
+                        photosArray.push(secondColumnPhotos[i]);
                     }
                 }
                 
@@ -442,12 +442,12 @@
                 
                 let newFirstColumn = createFirstDivColumn();
                 
-                photos.forEach(function(item) {
+                photosArray.forEach(function(item) {
 
                     newFirstColumn.appendChild(item);
                 });
                 
-                gridContainer.appendChild(newFirstColumn);
+                photos.appendChild(newFirstColumn);
                 newFirstColumn.style.width = "100%";
                 newFirstColumn.classList.remove("invisible");
             }
@@ -456,28 +456,28 @@
                 
                 let firstColumn = document.getElementById("first-column");
                 
-                let photos = getPhotosFromDivColumn(firstColumn);
+                let photosArray = getPhotosFromDivColumn(firstColumn);
                 
                 let newFirstColumn = createFirstDivColumn();
                 let secondColumn = createSecondDivColumn();
                 
-                for (var i = 0; i < photos.length; i++) {
+                for (var i = 0; i < photosArray.length; i++) {
                 
                     if (i % 2 === 0) {
                         
-                        newFirstColumn.appendChild(photos[i]);
+                        newFirstColumn.appendChild(photosArray[i]);
                     }
                     
                     if (i % 2 !== 0) {
                         
-                        secondColumn.appendChild(photos[i]);
+                        secondColumn.appendChild(photosArray[i]);
                     }
                 }
                 
                 firstColumn.remove();
                 
-                gridContainer.appendChild(newFirstColumn);
-                gridContainer.appendChild(secondColumn);
+                photos.appendChild(newFirstColumn);
+                photos.appendChild(secondColumn);
                 
                 newFirstColumn.classList.remove("invisible");
                 secondColumn.classList.remove("invisible");
@@ -591,7 +591,7 @@
                     imageElement.src = '/uploads/photographs/' + params[i];
                     
                     gridItemElement.appendChild(imageElement);
-                    gridContainer.appendChild(gridItemElement);
+                    photos.appendChild(gridItemElement);
                 }
             }              
             
@@ -621,11 +621,11 @@
             function showPhotosBySessionName(sessionName) {
                 
                 $("#photos").fadeOut("fast", function() {
-                    if (gridContainer.hasChildNodes()) {
+                    if (photos.hasChildNodes()) {
                     
-                        while (gridContainer.firstChild) {
+                        while (photos.firstChild) {
 
-                            gridContainer.removeChild(gridContainer.firstChild);
+                            photos.removeChild(photos.firstChild);
                         }
                     }
 
@@ -658,7 +658,7 @@
                     footer.classList.add("invisible");
                                                  
                     let sessionName = event.target.innerHTML;
-                    showPhotosBySessionName(sessionName);
+                    //showPhotosBySessionName(sessionName);
                     
                     setTimeout(function() {
                         
@@ -680,7 +680,7 @@
                             item = "grid-item-3";
                         }
                     
-                        switchOrAddGridClasses(gridContainer, container, item);
+{#                        switchOrAddGridClasses(photos, container, item);#}
                         footer.classList.remove("invisible");
                     }, 700);
                 }
