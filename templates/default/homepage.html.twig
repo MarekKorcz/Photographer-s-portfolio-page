@@ -23,7 +23,7 @@
             <div id="photos">
                 {% if sessionPhotos is defined %}
                     {% for photo in sessionPhotos %}
-                        <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible">
+                        <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible ex1Class ex2Class">
                     {% endfor %}
                 {% endif %}
             </div>
@@ -56,8 +56,10 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
+            let windowWidth = window.innerWidth;
             let menuButton = document.getElementById("menu-button");  
             let photos = document.getElementById("photos");
+            let content = document.getElementById("content");
             let footer = document.getElementById("footer");
             
             // initial configuration
@@ -69,8 +71,6 @@
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
                 let menu = document.getElementById("menu");
-                let content = document.getElementById("content");
-                let windowWidth = window.innerWidth;
                 
                 if (windowWidth > 740) {
                     
@@ -129,7 +129,6 @@
                 let heading = document.getElementById("heading");
                 let headerSpacing = document.getElementById("header-spacing");
                 let contactBar = document.getElementById("contact-bar");
-                let content = document.getElementById("content");
                 let windowWidth = window.innerWidth;
                 let menu = document.getElementById("menu");
                 let menuButton = document.getElementById("menu-button");
@@ -293,7 +292,7 @@
             function createFirstDivColumn() {
                 
                 let firstColumn = document.createElement('div');
-                firstColumn.setAttribute('id', 'first-column');
+                firstColumn.classList.add("first-column");
                 firstColumn.classList.add("invisible");
                 firstColumn.classList.add("grid-box");
                 
@@ -303,7 +302,7 @@
             function createSecondDivColumn() {
                 
                 let secondColumn = document.createElement('div');
-                secondColumn.setAttribute('id', 'second-column');
+                secondColumn.classList.add("second-column");
                 secondColumn.classList.add("invisible");
                 secondColumn.classList.add("grid-box");
                 
@@ -316,13 +315,17 @@
                 let photosArray = [];
 
                 children.forEach(function(item){
+                    
+                    let itemClasses = String(item.className);
+                    let classArray = itemClasses.split(" ");
 
-                    // remove [object Text] elements
-                    // case when items are loaded initially with DOM (weird [object Text] elements are added too) 
-                    if(item.constructor.name !== "Text") {
+                    for (let i = 0; i < classArray.length; i++) {
 
-                        item.classList.remove("invisible");
-                        photosArray.push(item);
+                        if (classArray[i] === "invisible") {
+
+                            item.classList.remove("invisible");
+                            photosArray.push(item);
+                        }
                     }
                 });
                 
@@ -408,14 +411,14 @@
             
             function redistributePhotosToOneDivColumn() {
                 
-                let firstColumn = document.getElementById("first-column");
-                let secondColumn = document.getElementById("second-column");
+                let firstColumn = document.getElementsByClassName("first-column");
+                let secondColumn = document.getElementsByClassName("second-column");
                                 
-                let firstColumnCount = countPhotosInDivColumn(firstColumn);
-                let secondColumnCount = countPhotosInDivColumn(secondColumn);
+                let firstColumnCount = countPhotosInDivColumn(firstColumn[0]);
+                let secondColumnCount = countPhotosInDivColumn(secondColumn[0]);
                                 
-                let firstColumnPhotos = getPhotosFromDivColumn(firstColumn);
-                let secondColumnPhotos = getPhotosFromDivColumn(secondColumn);
+                let firstColumnPhotos = getPhotosFromDivColumn(firstColumn[0]);
+                let secondColumnPhotos = getPhotosFromDivColumn(secondColumn[0]);
                 
                 let iterationNumber = Math.max(
                     firstColumnCount, 
@@ -437,8 +440,8 @@
                     }
                 }
                 
-                firstColumn.remove();
-                secondColumn.remove();
+                firstColumn[0].remove();
+                secondColumn[0].remove();
                 
                 let newFirstColumn = createFirstDivColumn();
                 
@@ -454,9 +457,9 @@
             
             function redistributePhotosToTwoDivColumns() {
                 
-                let firstColumn = document.getElementById("first-column");
+                let firstColumn = document.getElementsByClassName("first-column");
                 
-                let photosArray = getPhotosFromDivColumn(firstColumn);
+                let photosArray = getPhotosFromDivColumn(firstColumn[0]);
                 
                 let newFirstColumn = createFirstDivColumn();
                 let secondColumn = createSecondDivColumn();
@@ -474,7 +477,7 @@
                     }
                 }
                 
-                firstColumn.remove();
+                firstColumn[0].remove();
                 
                 photos.appendChild(newFirstColumn);
                 photos.appendChild(secondColumn);
@@ -584,14 +587,11 @@
                 
                 for (var i = 0; i < params.length; i++) {
                     
-                    let gridItemElement = document.createElement('div');
-                    gridItemElement.classList.add("invisible");
-                    
                     let imageElement = document.createElement('img');
+                    imageElement.classList.add("invisible");
                     imageElement.src = '/uploads/photographs/' + params[i];
                     
-                    gridItemElement.appendChild(imageElement);
-                    photos.appendChild(gridItemElement);
+                    photos.appendChild(imageElement);
                 }
             }              
             
@@ -618,24 +618,6 @@
                 createAndPasteSessionPhotos(photosNames);
             }
             
-            function showPhotosBySessionName(sessionName) {
-                
-                $("#photos").fadeOut("fast", function() {
-                    if (photos.hasChildNodes()) {
-                    
-                        while (photos.firstChild) {
-
-                            photos.removeChild(photos.firstChild);
-                        }
-                    }
-
-                    document.getElementById("photos").style.display = null;
-                    
-                    getPhotos(sessionName);
-                });
-                
-            }
-            
             // right mouse click
             document.addEventListener('contextmenu', function(event) {
                 
@@ -647,42 +629,48 @@
             
             document.addEventListener('click', function(event) {
                 
-                let menuPop = document.getElementById("menu-pop");
-                let content = document.getElementById("content");
                 let container = document.getElementById("container");
                 let popBackground = document.getElementById("photo-pop-backgorund");
                 let popBox = document.getElementById("photo-box");
+                let menuPop = document.getElementById("menu-pop");
 
-                if(event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
+                if (event.target.nodeName === "LI" && event.target.parentElement.id === "sessions") {
                     
                     footer.classList.add("invisible");
-                                                 
-                    let sessionName = event.target.innerHTML;
-                    //showPhotosBySessionName(sessionName);
-                    
-                    setTimeout(function() {
                         
-                        let container = "";
-                        let item = "";
+                    let sessionName = event.target.innerHTML;
+                    
+                    getPhotos(sessionName);                
+                
+                    $("#photos").fadeOut("slow", function() {
 
-                        if (menuPop) {
+                        for (let i = 1; i <= 2; i++) {
                             
-                            container = "grid-container-2";
-                            item = "grid-item-2";
-                            
-                            menuButton.classList.remove("change");
-                            content.classList.remove("invisible");
-                            menuPop.remove();
+                            $('#photos').find('div').first().remove();
+                        }
+                    });  
+                    
+                    $("#photos").fadeIn("fast", function() {
+                               
+                        if (windowWidth > 740) {
+
+                            putPhotosToDivColumn(2);
 
                         } else {
 
-                            container = "grid-container-3";
-                            item = "grid-item-3";
+                            putPhotosToDivColumn(1);
                         }
-                    
-{#                        switchOrAddGridClasses(photos, container, item);#}
+                        
                         footer.classList.remove("invisible");
-                    }, 700);
+                    });
+                               
+                    if (menuPop) {
+                        
+                        menuButton.classList.remove("change");
+
+                        content.classList.remove("invisible");
+                        menuPop.remove();
+                    }
                 }
                 
                 if(event.target.nodeName === "IMG" && !popBox) {
@@ -731,6 +719,7 @@
             box-sizing: border-box;
             background-color: #060f1c;
             color: white;
+            font-family: source sans pro, helvetica neue, Arial, sans-serif;
         }
         
         #container {
