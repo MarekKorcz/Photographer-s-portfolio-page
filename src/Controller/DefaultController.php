@@ -140,4 +140,20 @@ class DefaultController extends AbstractController {
             'message' => 'No data'
         ));
     }
+    
+    /**
+     * @Route("/{photoUrl}", name="show_photo")
+     */
+    public function showPhoto($photoUrl) {
+        
+        $photo = $this->getDoctrine()->getManager()->getRepository('App\Entity\Photograph')->findOneBy(
+            array(
+                'photoName' => $photoUrl
+            )
+        );
+        
+        return $this->render('default/show-photo.html.twig', array(
+            'photo' => $photo
+        ));
+    }
 }

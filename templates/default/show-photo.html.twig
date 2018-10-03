@@ -1,0 +1,44 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div id="container">
+        <div id="photo-container">
+            <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible">
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #060f1c;
+            color: white;
+            font-family: source sans pro, helvetica neue, Arial, sans-serif;
+        }
+        
+        img {
+            max-width: 90%;
+            max-height: 90%;
+            border: white 10px solid;
+        }     
+        
+        #container {
+            position: absolute;
+        }
+        
+        #photo-container {
+            position: relative;
+        }
+        
+        body.noscroll {
+            position: fixed;
+            overflow-y: scroll;
+            width: 100%;
+        }
+    </style>
+{% endblock %}
