@@ -535,8 +535,9 @@
                 socialsUl.setAttribute('id', 'socials');
                 
                 let facebookLiTag = document.createElement('li');
-                // add href to fb page
                 let facebookATag = document.createElement('a');
+                facebookATag.setAttribute('target', '_blank');
+                facebookATag.href = "https://www.facebook.com/people/Marcin-Krawczyk/100018599103429";
                 let facebookITag = document.createElement('i');
                 
                 facebookITag.setAttribute('id', 'facebook');
@@ -549,8 +550,9 @@
                 socialsUl.appendChild(facebookLiTag);
                 
                 let instagramLiTag = document.createElement('li');
-                // add href to instagram page
                 let instagramATag = document.createElement('a');
+                instagramATag.setAttribute('target', '_blank');
+                instagramATag.href = "https://www.instagram.com/marcinkrawczyk.jpg/";
                 let instagramITag = document.createElement('i');
                 
                 instagramITag.setAttribute('id', 'instagram');
