@@ -3,9 +3,20 @@
 {% block body %}
     <div id="container">
         <div id="photo-container">
-            <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible">
+            {% if photo is defined %}
+                <img src="{{ asset(photo.photoName, 'photographs') }}" class="invisible">
+            {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('contextmenu', function(event) {
+
+            event.preventDefault();
+        });
+    </script>
 {% endblock %}
 
 {% block stylesheets %}

@@ -142,7 +142,7 @@ class DefaultController extends AbstractController {
     }
     
     /**
-     * @Route("/{photoUrl}", name="show_photo")
+     * @Route("/photo/{photoUrl}", name="show_photo")
      */
     public function showPhoto($photoUrl) {
         
